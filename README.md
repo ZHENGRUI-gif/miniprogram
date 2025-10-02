@@ -1,0 +1,1 @@
+需要在project.config.json的29行填入自己的wxid
