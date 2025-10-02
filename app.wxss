@@ -1,0 +1,12 @@
+page { background-color: #f5f6f7; }
+
+:root { --primary: #fb7299; --text: #222; --subtext: #666; --muted: #999; --card: #fff; --radius: 16rpx; --shadow: 0 6rpx 24rpx rgba(0,0,0,0.06); }
+
+.text-ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+.card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.btn-primary { background: var(--primary); color: #fff; border-radius: 24rpx; padding: 20rpx; text-align: center; }
+.input { background: #fff; border: 1rpx solid #eee; border-radius: 16rpx; padding: 22rpx; }
+.section-title { font-size: 30rpx; color: var(--text); margin: 20rpx 0; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 24rpx; }
+

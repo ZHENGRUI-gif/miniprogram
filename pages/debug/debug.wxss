@@ -1,0 +1,65 @@
+.container {
+  padding: 20rpx;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.btn {
+  flex: 1;
+  min-width: 200rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  background-color: #007aff;
+  color: white;
+  border-radius: 10rpx;
+}
+
+.logs {
+  margin-bottom: 30rpx;
+}
+
+.log-title, .result-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.log-content {
+  height: 400rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  background-color: #f5f5f5;
+}
+
+.log-item {
+  display: block;
+  margin-bottom: 10rpx;
+  font-size: 24rpx;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.result-content {
+  border: 1rpx solid #ddd;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  min-height: 200rpx;
+}

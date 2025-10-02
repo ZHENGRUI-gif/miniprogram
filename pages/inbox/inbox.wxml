@@ -1,0 +1,32 @@
+<view class="container">
+  <view class="quick">
+    <view class="q-item" bindtap="goReply">
+      <text class="q-icon">💬</text>
+      <text class="q-text">回复与@</text>
+    </view>
+    <view class="q-item" bindtap="goLikes">
+      <text class="q-icon">👍</text>
+      <text class="q-text">收到喜欢</text>
+    </view>
+    <view class="q-item" bindtap="goFans">
+      <text class="q-icon">👤</text>
+      <text class="q-text">新增粉丝</text>
+    </view>
+  </view>
+
+  <view class="list">
+    <block wx:for="{{items}}" wx:key="id">
+      <view class="row" bindtap="goChat" data-uid="{{item.uid}}">
+        <image wx:if="{{item.avatar}}" class="avatar" src="{{item.avatar}}" mode="aspectFill" />
+        <view wx:else class="avatar placeholder">🙂</view>
+        <view class="content">
+          <view class="title text-ellipsis">{{item.title}}</view>
+          <view class="desc text-ellipsis">{{item.desc}}</view>
+        </view>
+        <view class="time">{{item.time}}</view>
+      </view>
+    </block>
+  </view>
+</view>
+
+

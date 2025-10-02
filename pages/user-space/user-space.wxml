@@ -1,0 +1,107 @@
+<view class="container">
+  <!-- 固定聊天按钮 -->
+  <view class="chat-btn" bindtap="goChat">💬</view>
+
+  <!-- 用户信息区域 -->
+  <view class="profile-section">
+    <!-- 用户头像和基本信息 -->
+    <view class="user-header">
+      <view class="avatar-container">
+        <image wx:if="{{user.avatar_url}}" class="avatar" src="{{user.avatar_url}}" mode="aspectFill" />
+        <view wx:else class="avatar placeholder">🙂</view>
+        <view wx:if="{{user.level}}" class="level-badge">LV{{user.level}}</view>
+      </view>
+      
+      <view class="user-info">
+        <view class="name-row">
+          <text class="nickname">{{user.nickname || '用户'}}</text>
+          <view wx:if="{{user.auth}}" class="auth-badge">认证</view>
+          <view wx:if="{{user.vip}}" class="vip-badge">大会员</view>
+        </view>
+        <view class="desc">{{user.signature || '这个人很神秘，什么都没有写'}}</view>
+        <view class="location">IP属地: {{user.location || '未知'}}</view>
+      </view>
+    </view>
+
+    <!-- 统计数据 -->
+    <view class="stats-row">
+      <view class="stat-item" bindtap="goFans">
+        <text class="stat-number">{{formatNum(user.fansCount || 0)}}</text>
+        <text class="stat-label">粉丝</text>
+      </view>
+      <view class="stat-item" bindtap="goFollows">
+        <text class="stat-number">{{formatNum(user.followsCount || 0)}}</text>
+        <text class="stat-label">关注</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{formatNum(user.loveCount || 0)}}</text>
+        <text class="stat-label">获赞</text>
+      </view>
+    </view>
+
+    <!-- 关注按钮 -->
+    <view class="follow-btn">
+      <text class="follow-text">+ 关注</text>
+    </view>
+  </view>
+
+  <!-- 导航标签 -->
+  <view class="nav-tabs">
+    <view class="tab {{activeTab === 'home' ? 'active' : ''}}" bindtap="switchTab" data-tab="home">主页</view>
+    <view class="tab {{activeTab === 'videos' ? 'active' : ''}}" bindtap="switchTab" data-tab="videos">投稿</view>
+    <view class="tab {{activeTab === 'favorites' ? 'active' : ''}}" bindtap="switchTab" data-tab="favorites">收藏</view>
+  </view>
+
+  <!-- 视频列表区域 -->
+  <view wx:if="{{activeTab === 'videos'}}" class="videos-section">
+    <view class="section-header">
+      <view class="play-all-btn">
+        <text class="play-icon">▶</text>
+        <text class="play-text">播放全部</text>
+      </view>
+      <view class="sort-option">
+        <text class="sort-text">最新发布</text>
+        <text class="sort-icon">☰</text>
+      </view>
+    </view>
+
+    <view wx:if="{{videos.length > 0}}" class="video-list">
+      <block wx:for="{{videos}}" wx:key="vid">
+        <view class="video-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+          <view class="video-thumbnail">
+            <image class="thumbnail" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+            <view class="duration">{{formatDuration(item.video.duration)}}</view>
+          </view>
+          <view class="video-info">
+            <view class="video-title">{{item.video.title}}</view>
+            <view class="video-meta">
+              <text class="upload-time">{{formatUploadTime(item.video.uploadDate)}}</text>
+            </view>
+            <view class="video-stats">
+              <view class="stat">
+                <text class="stat-icon">▶</text>
+                <text class="stat-text">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}}</text>
+              </view>
+              <view class="stat">
+                <text class="stat-icon">💬</text>
+                <text class="stat-text">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="more-btn">⋮</view>
+        </view>
+      </block>
+    </view>
+    <view wx:else class="empty-state">
+      <text class="empty-text">暂无视频</text>
+    </view>
+  </view>
+
+  <!-- 其他标签内容 -->
+  <view wx:elif="{{activeTab === 'home'}}" class="home-content">
+    <text class="empty-text">主页内容开发中</text>
+  </view>
+  <view wx:else class="favorites-content">
+    <text class="empty-text">收藏内容开发中</text>
+  </view>
+</view>

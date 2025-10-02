@@ -1,0 +1,17 @@
+<view class="container">
+  <view class="time" wx:if="{{dialog.length}}">{{dialog[0].timeText}}</view>
+  <view class="msgs">
+    <block wx:for="{{dialog}}" wx:key="id">
+      <view class="msg {{item.mine ? 'mine' : ''}}">
+        <image wx:if="{{!item.mine && item.avatar}}" class="avatar" src="{{item.avatar}}" mode="aspectFill" />
+        <view class="bubble">{{item.content}}</view>
+      </view>
+    </block>
+  </view>
+  <view class="inputbar">
+    <input class="ipt" placeholder="发个消息聊聊呀~" value="{{input}}" bindinput="onInput" confirm-type="send" bindconfirm="onSend" />
+    <view class="send" bindtap="onSend">发送</view>
+  </view>
+</view>
+
+

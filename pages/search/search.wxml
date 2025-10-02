@@ -1,0 +1,113 @@
+<view class="container {{showKeyboard ? 'keyboard-active' : ''}}">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-box">
+      <view class="search-input">
+        <text class="search-icon">🔍</text>
+        <input 
+          class="search-input-field" 
+          placeholder="搜索视频/用户" 
+          value="{{keyword}}"
+          bindinput="onInput"
+          bindfocus="onInputFocus"
+          bindblur="onInputBlur"
+          confirm-type="search"
+          bindconfirm="onSearch"
+          focus="{{inputFocus}}"
+        />
+      </view>
+      <view class="search-btn" bindtap="onSearchBtnTap">搜索</view>
+    </view>
+  </view>
+
+  <!-- 实时搜索推荐 -->
+  <view class="matching-section" wx:if="{{matchingWords.length && keyword}}">
+    <view class="section-title">搜索推荐</view>
+    <view class="matching-list">
+      <block wx:for="{{matchingWords}}" wx:key="content">
+        <view class="matching-item" bindtap="useMatchingWord" data-content="{{item.content}}">
+          <text class="matching-text">{{item.content}}</text>
+          <view wx:if="{{item.type === 2}}" class="matching-tag hot">热</view>
+          <view wx:elif="{{item.type === 1}}" class="matching-tag new">新</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 搜索建议 -->
+  <view class="suggest-section" wx:if="{{suggest.length && !keyword}}">
+    <view class="section-title">猜你想搜</view>
+    <view class="suggest-list">
+      <block wx:for="{{suggest}}" wx:key="*this">
+        <view class="suggest-item" bindtap="useSuggest" data-text="{{item}}">{{item}}</view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 热搜榜单 -->
+  <view class="hot-search-section" wx:if="{{!searchKeyword && !showKeyboard && hotSearches.length}}">
+    <view class="section-header">
+      <text class="section-title">bilibili热搜</text>
+      <text class="more-link">完整榜单 ></text>
+    </view>
+    <view class="hot-list">
+      <block wx:for="{{hotSearches}}" wx:key="index">
+        <view class="hot-item {{index < 5 ? 'left-column' : 'right-column'}}" bindtap="useHotSearch" data-keyword="{{item.keyword}}">
+          <view class="hot-rank">{{index + 1}}</view>
+          <view class="hot-text">{{item.keyword}}</view>
+          <view class="hot-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history-section" wx:if="{{!searchKeyword && !showKeyboard && searchHistory.length}}">
+    <view class="section-header">
+      <text class="section-title">搜索历史</text>
+      <view class="history-actions">
+        <text class="action-icon" bindtap="clearAllHistory">清空</text>
+      </view>
+    </view>
+    <view class="history-list">
+      <block wx:for="{{searchHistory}}" wx:key="index">
+        <view class="history-item" bindtap="useHistorySearch" data-keyword="{{item.keyword}}">
+          <text class="history-text">{{item.keyword}}</text>
+          <text class="history-time" wx:if="{{item.time}}">{{item.time}}</text>
+          <text class="history-delete" bindtap="removeHistory" data-index="{{index}}" catchtap="true">×</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{searchKeyword}}">
+    <view class="section-title">搜索结果</view>
+    <view class="video-grid" wx:if="{{videos.length}}">
+      <block wx:for="{{videos}}" wx:key="vid">
+        <view class="video-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+          <image class="video-cover" src="{{item.video.cover_url}}" mode="aspectFill" />
+          <view class="video-title text-ellipsis">{{item.video.title}}</view>
+          <view class="video-meta">
+            <text class="play-count">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}} 播放</text>
+            <text class="danmu-count">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}} 弹幕</text>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-more">加载中...</view>
+    <view wx:if="{{!hasMore && videos.length > 0}}" class="no-more">没有更多了</view>
+    <view wx:if="{{!loading && videos.length === 0}}" class="no-results">
+      <text class="no-results-text">没有找到相关视频</text>
+    </view>
+  </view>
+
+  <!-- 反馈按钮 -->
+  <view class="feedback-btn" bindtap="showFeedback">
+    <text class="feedback-icon">?</text>
+    <text class="feedback-text">反馈</text>
+  </view>
+</view>
+

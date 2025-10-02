@@ -1,0 +1,171 @@
+<scroll-view class="page" scroll-y="true" bindscroll="onPageScroll" bindscrolltolower="loadMoreVideos" lower-threshold="100" refresher-enabled="true" refresher-triggered="{{refreshing}}" bindrefresherrefresh="onPullDownRefresh" scroll-top="{{scrollTop}}">
+  <view class="topbar">
+    <view class="avatar" bindtap="onAvatarTap">
+      <image wx:if="{{userInfo && userAvatar}}" class="avatar-img" src="{{userAvatar}}" mode="aspectFill" />
+      <text wx:else class="avatar-emoji">🙂</text>
+    </view>
+    <view class="search" bindtap="goSearch">
+      <text class="icon">🔍</text>
+      <text class="placeholder">{{placeholder}}</text>
+    </view>
+    <view class="inbox" bindtap="goInbox">✉️</view>
+  </view>
+
+  <scroll-view class="tabs" scroll-x="true" enable-flex="true">
+    <view class="tab {{activeTab===item ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="*this" data-tab="{{item}}" bindtap="switchTab">{{item}}</view>
+  </scroll-view>
+
+  <swiper class="banner" autoplay interval="4000" circular indicator-dots indicator-color="#eee" indicator-active-color="#fb7299">
+    <block wx:for="{{banners}}" wx:key="url">
+      <swiper-item bindtap="onBannerTap" data-target="{{item.target}}">
+        <image class="banner-img" src="{{item.url}}" mode="aspectFill" />
+        <view class="banner-title text-ellipsis" style="color: {{item.color}}">{{item.title}}</view>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <view class="video-container">
+    <block wx:for="{{displayVideos}}" wx:key="vid" wx:for-index="index">
+      <!-- 每10个小视频后添加一个大视频 -->
+      <view wx:if="{{index > 0 && index % 10 === 0}}" class="large-video-section" id="large-video-{{index}}">
+        <view class="large-video-card">
+          <view class="large-video-wrapper">
+            <video 
+              id="large-video-{{index}}"
+              class="large-video" 
+              src="{{item.video.videoUrl || item.video.url || ''}}" 
+              poster="{{item.video.coverUrl}}"
+              autoplay="{{false}}"
+              loop="{{true}}"
+              muted="{{true}}"
+              show-center-play-btn="{{false}}"
+              show-play-btn="{{false}}"
+              show-fullscreen-btn="{{false}}"
+              show-progress="{{false}}"
+              show-loading="{{false}}"
+              object-fit="cover"
+              bindplay="onLargeVideoPlay"
+              bindpause="onLargeVideoPause"
+              bindended="onLargeVideoEnded"
+              binderror="onLargeVideoError"
+              data-vid="{{item.video.vid}}"
+              data-index="{{index}}"
+            ></video>
+            <view class="large-video-overlay">
+              <view class="large-stats">
+                <view class="large-stat-item">
+                  <text class="large-stat-icon">▶</text>
+                  <text class="large-stat-text">{{formatNum(item.stats.play)}}</text>
+                </view>
+                <view class="large-stat-item">
+                  <text class="large-stat-icon">💬</text>
+                  <text class="large-stat-text">{{formatNum(item.stats.danmu)}}</text>
+                </view>
+              </view>
+              <view class="large-duration">{{formatDuration(item.video.duration)}}</view>
+            </view>
+            <!-- 点击跳转到详情页 -->
+            <view class="large-video-mask" bindtap="goDetail" data-vid="{{item.video.vid}}"></view>
+          </view>
+          <view class="large-video-info">
+            <view class="large-title">{{item.video.title}}</view>
+            <view class="large-meta">
+              <text class="large-up-name" bindtap="goUpSpace" data-uid="{{item.user.uid}}" catchtap="true">
+                {{item.user.nickname || 'UP主'}}
+              </text>
+              <text class="large-upload-time">· {{formatUploadTime(item.video.uploadDate)}}</text>
+            </view>
+            <view class="large-likes">
+              <text class="like-icon">👍</text>
+              <text class="like-count">{{formatNum(item.stats.like || 0)}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 普通小尺寸视频 -->
+      <view class="card item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+        <view class="thumb-wrap">
+          <image class="cover" src="{{item.video.coverUrl}}" mode="aspectFill" />
+          <view class="cover-mask">
+            <view class="stats-left">
+              <view class="stat-item">
+                <text class="stat-icon">▶</text>
+                <text class="stat-text">{{formatNum(item.stats.play)}}</text>
+              </view>
+              <view class="stat-item">
+                <text class="stat-icon">💬</text>
+                <text class="stat-text">{{formatNum(item.stats.danmu)}}</text>
+              </view>
+            </view>
+            <view class="duration">{{formatDuration(item.video.duration)}}</view>
+          </view>
+        </view>
+        <view class="title text-ellipsis">{{item.video.title}}</view>
+        <view class="meta">
+          <text class="up-name" bindtap="goUpSpace" data-uid="{{item.user.uid}}" catchtap="true">
+            {{item.user.nickname || 'UP主'}}
+          </text>
+          <text class="upload-time">· {{formatUploadTime(item.video.uploadDate)}}</text>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 加载更多状态 -->
+    <view class="load-more-section">
+      <view wx:if="{{loading}}" class="loading-more">
+        <text class="loading-text">加载中...</text>
+      </view>
+      <view wx:else class="load-more-tip">
+        <text class="tip-text">上拉加载更多</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 回到顶部按钮 -->
+<view wx:if="{{showBackToTop}}" class="back-to-top" bindtap="scrollToTop">
+  <text class="back-to-top-icon">↑</text>
+</view>
+
+<!-- 视频预览模态框 -->
+<view wx:if="{{showVideoPreview}}" class="video-preview-modal" bindtap="closeVideoPreview">
+  <view class="preview-content" catchtap="true">
+    <view class="preview-header">
+      <text class="preview-title">{{previewVideo.title}}</text>
+      <text class="close-btn" bindtap="closeVideoPreview">×</text>
+    </view>
+    <video 
+      class="preview-video" 
+      src="{{previewVideo.videoUrl}}" 
+      controls 
+      autoplay
+      poster="{{previewVideo.coverUrl}}"
+      bindplay="onVideoPlay"
+      bindpause="onVideoPause"
+      bindended="onVideoEnded"
+    ></video>
+    <view class="preview-info">
+      <view class="preview-meta">
+        <text class="preview-up-name" bindtap="goUpSpace" data-uid="{{previewVideo.uid}}" catchtap="true">
+          {{previewVideo.upName}}
+        </text>
+        <text class="preview-upload-time">· {{previewVideo.uploadTime}}</text>
+      </view>
+      <view class="preview-stats">
+        <view class="preview-stat-item">
+          <text class="preview-stat-icon">▶</text>
+          <text class="preview-stat-text">{{formatNum(previewVideo.playCount)}}</text>
+        </view>
+        <view class="preview-stat-item">
+          <text class="preview-stat-icon">💬</text>
+          <text class="preview-stat-text">{{formatNum(previewVideo.danmuCount)}}</text>
+        </view>
+        <view class="preview-stat-item">
+          <text class="preview-stat-icon">👍</text>
+          <text class="preview-stat-text">{{formatNum(previewVideo.likeCount)}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,12 @@
+<view class="container">
+  <view class="card header">
+    <image wx:if="{{userAvatar}}" class="avatar" src="{{userAvatar}}" mode="aspectFill" />
+    <view wx:else class="avatar placeholder">🙂</view>
+    <view class="info">
+      <view class="name">{{user.nickname || '未登录'}}</view>
+      <view class="desc text-ellipsis">{{user.description}}</view>
+    </view>
+  </view>
+  <view wx:if="{{!hasLogin}}" class="btn-primary" bindtap="goLogin">去登录</view>
+</view>
+

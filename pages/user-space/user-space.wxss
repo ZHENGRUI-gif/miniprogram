@@ -1,0 +1,356 @@
+.container { 
+  background: #f5f6f7; 
+  min-height: 100vh; 
+  padding-top: 140rpx; /* 继续下移内容 */
+}
+
+/* 固定聊天按钮 */
+.chat-btn {
+  position: fixed;
+  top: 120rpx; /* 调整到系统导航栏下方 */
+  right: 30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: #fb7299;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(251, 114, 153, 0.3);
+  z-index: 100;
+}
+
+/* 用户信息区域 */
+.profile-section {
+  background: #fff;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.user-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 24rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.avatar.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  color: #ccc;
+}
+
+.level-badge {
+  position: absolute;
+  bottom: -8rpx;
+  right: -8rpx;
+  background: #fb7299;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #fff;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.nickname {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.auth-badge {
+  background: #00aeec;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.vip-badge {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.location {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 统计数据行 */
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30rpx;
+  padding: 20rpx 0;
+  border-top: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stat-number {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 关注按钮 */
+.follow-btn {
+  background: #fb7299;
+  color: #fff;
+  padding: 16rpx 40rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.follow-text {
+  color: #fff;
+}
+
+/* 导航标签 */
+.nav-tabs { 
+  display: flex; 
+  background: #fff; 
+  margin: 0 0 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.tab { 
+  flex: 1; 
+  text-align: center; 
+  padding: 24rpx 0; 
+  font-size: 28rpx; 
+  color: #666;
+  position: relative;
+}
+
+.tab.active { 
+  color: #fb7299; 
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  background: #fb7299;
+  border-radius: 2rpx;
+}
+
+/* 视频列表区域 */
+.videos-section {
+  background: #fff;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.play-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.play-icon {
+  font-size: 24rpx;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.sort-icon {
+  font-size: 24rpx;
+}
+
+/* 视频列表 */
+.video-list {
+  padding: 0 20rpx;
+}
+
+.video-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f8f8f8;
+}
+
+.video-item:last-child {
+  border-bottom: none;
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 200rpx;
+  height: 120rpx;
+  margin-right: 20rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+}
+
+.duration {
+  position: absolute;
+  bottom: 8rpx;
+  right: 8rpx;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+  font-family: 'Courier New', monospace;
+}
+
+.video-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.video-title {
+  font-size: 28rpx;
+  color: #222;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.video-meta {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.upload-time {
+  color: #999;
+}
+
+.video-stats {
+  display: flex;
+  gap: 20rpx;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.stat-icon {
+  font-size: 20rpx;
+}
+
+.stat-text {
+  font-size: 24rpx;
+}
+
+.more-btn {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 32rpx;
+  margin-left: 20rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80rpx 20rpx;
+  color: #999;
+}
+
+.empty-text {
+  font-size: 28rpx;
+}
+
+/* 其他内容区域 */
+.home-content, .favorites-content {
+  background: #fff;
+  padding: 80rpx 20rpx;
+  text-align: center;
+  color: #999;
+}
+
+/* 响应式调整 */
+@media (min-width: 750rpx) {
+  .video-thumbnail {
+    width: 240rpx;
+    height: 140rpx;
+  }
+}

@@ -1,0 +1,37 @@
+.container { padding: 0 0 24rpx; background: #f5f6f7; }
+.player { width: 100%; height: 420rpx; background: #000; }
+.card { background: #fff; margin: 16rpx 16rpx 0; padding: 20rpx; border-radius: 16rpx; }
+.v-info {}
+.v-title { font-size: 34rpx; color: #222; font-weight: 600; line-height: 1.4; }
+.v-meta { margin-top: 10rpx; color: #999; font-size: 24rpx; display: flex; align-items: center; gap: 8rpx; }
+.v-meta .dot { color: #ccc; }
+
+/* UP 主 */
+.up { display: flex; align-items: center; justify-content: space-between; }
+.up .left { display: flex; align-items: center; gap: 16rpx; }
+.up-avatar { width: 80rpx; height: 80rpx; border-radius: 50%; background: #eee; display:flex; align-items:center; justify-content:center; }
+.up-avatar.placeholder { font-size: 32rpx; }
+.up-info { display: flex; flex-direction: column; }
+.up-name { font-size: 28rpx; color: #222; }
+.up-desc { font-size: 22rpx; color: #999; max-width: 480rpx; }
+.btn.follow { background: #fb7299; color: #fff; padding: 10rpx 20rpx; border-radius: 100rpx; font-size: 26rpx; }
+
+/* 操作区 */
+.actions { display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; }
+.act { display: flex; flex-direction: column; align-items: center; gap: 8rpx; color: #666; }
+.act .icon { font-size: 32rpx; }
+.act .txt { font-size: 22rpx; }
+
+/* 弹幕层 */
+.danmu-box { position: relative; height: 0; }
+.dm { position: absolute; left: 20rpx; opacity: 0.9; }
+
+/* 相关推荐 */
+.section-title { font-size: 30rpx; color: #222; margin-bottom: 12rpx; font-weight: 600; }
+.r-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; }
+.r-item { background: #fff; border-radius: 12rpx; overflow: hidden; }
+.r-cover { width: 100%; height: 220rpx; background: #eee; }
+.r-title { padding: 10rpx 12rpx 0; font-size: 26rpx; color: #222; }
+.r-meta { padding: 0 12rpx 12rpx; font-size: 22rpx; color: #999; }
+.text-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+

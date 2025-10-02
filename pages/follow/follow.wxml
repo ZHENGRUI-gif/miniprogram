@@ -1,0 +1,12 @@
+<view class="container">
+  <view class="empty" wx:if="{{!videos.length}}">登录后查看你关注的最新视频</view>
+  <view class="grid" wx:else>
+    <block wx:for="{{videos}}" wx:key="vid">
+      <view class="card item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+        <image class="cover" src="{{item.video.cover_url}}" mode="aspectFill" />
+        <view class="title text-ellipsis">{{item.video.title}}</view>
+        <view class="meta">👁 {{formatNum(item.stats.play)}} · 💬 {{formatNum(item.stats.danmu)}}</view>
+      </view>
+    </block>
+  </view>
+</view>

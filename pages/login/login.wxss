@@ -1,0 +1,6 @@
+.wrap { padding: 80rpx 40rpx; }
+.form { padding: 40rpx; }
+.title { font-size: 36rpx; color: #222; font-weight: 600; margin-bottom: 24rpx; }
+.input { margin: 16rpx 0; }
+.btn-primary { margin-top: 24rpx; }
+

@@ -1,0 +1,73 @@
+<view class="container">
+  <!-- 播放器 -->
+  <video id="player" src="{{playUrl}}" controls autoplay bindtimeupdate="onTimeUpdate" class="player"></video>
+
+  <!-- 标题与基础信息 -->
+  <view class="card v-info">
+    <view class="v-title">{{video.video.title}}</view>
+    <view class="v-meta">
+      <text class="m">{{video.video.category || '视频'}}</text>
+      <text class="dot">·</text>
+      <text class="m">{{formatNum(video.stats.play)}} 次观看</text>
+      <text class="dot">·</text>
+      <text class="m">弹幕 {{formatNum(video.stats.danmu)}}</text>
+    </view>
+  </view>
+
+  <!-- UP 主信息区 -->
+  <view class="card up" wx:if="{{uploader}}" bindtap="goAuthor" data-uid="{{uploader.uid}}">
+    <view class="left">
+      <image wx:if="{{uploader.avatar}}" class="up-avatar" src="{{uploader.avatar}}" mode="aspectFill" />
+      <view wx:else class="up-avatar placeholder">🙂</view>
+      <view class="up-info">
+        <view class="up-name text-ellipsis">{{uploader.name || 'UP主'}}</view>
+        <view class="up-desc text-ellipsis" wx:if="{{uploader.desc}}">{{uploader.desc}}</view>
+      </view>
+    </view>
+    <view class="right">
+      <view class="btn follow">+ 关注</view>
+    </view>
+  </view>
+
+  <!-- 互动操作区 -->
+  <view class="card actions">
+    <view class="act">
+      <text class="icon">👍</text>
+      <text class="txt">点赞</text>
+    </view>
+    <view class="act">
+      <text class="icon">🪙</text>
+      <text class="txt">投币</text>
+    </view>
+    <view class="act">
+      <text class="icon">⭐</text>
+      <text class="txt">收藏</text>
+    </view>
+    <view class="act">
+      <text class="icon">📤</text>
+      <text class="txt">分享</text>
+    </view>
+  </view>
+
+  <!-- 弹幕层（示意） -->
+  <view class="danmu-box">
+    <block wx:for="{{danmus}}" wx:key="id">
+      <text class="dm" style="color: {{item.color}}; top: {{item.top}}rpx;">{{item.content}}</text>
+    </block>
+  </view>
+
+  <!-- 相关推荐 -->
+  <view class="card related">
+    <view class="section-title">相关推荐</view>
+    <view class="r-list">
+      <block wx:for="{{related}}" wx:key="vid">
+        <view class="r-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+          <image class="r-cover" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+          <view class="r-title text-ellipsis">{{item.video.title}}</view>
+          <view class="r-meta">{{formatNum(item.stats.play)}} · {{formatNum(item.stats.danmu)}}弹幕</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
+

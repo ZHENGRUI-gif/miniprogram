@@ -1,0 +1,8 @@
+.container { padding: 24rpx; }
+.header { display: flex; align-items: center; padding: 24rpx; }
+.avatar { width: 120rpx; height: 120rpx; border-radius: 50%; background: #eee; }
+.info { margin-left: 20rpx; }
+.name { font-size: 32rpx; font-weight: 600; color: #222; }
+.desc { color: #888; font-size: 24rpx; max-width: 480rpx; }
+.btn-primary { margin-top: 24rpx; }
+
