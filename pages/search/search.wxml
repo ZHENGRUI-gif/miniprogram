@@ -82,25 +82,66 @@
 
   <!-- 搜索结果 -->
   <view class="search-results" wx:if="{{searchKeyword}}">
-    <view class="section-title">搜索结果</view>
-    <view class="video-grid" wx:if="{{videos.length}}">
-      <block wx:for="{{videos}}" wx:key="vid">
-        <view class="video-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
-          <image class="video-cover" src="{{item.video.cover_url}}" mode="aspectFill" />
-          <view class="video-title text-ellipsis">{{item.video.title}}</view>
-          <view class="video-meta">
-            <text class="play-count">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}} 播放</text>
-            <text class="danmu-count">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}} 弹幕</text>
-          </view>
-        </view>
-      </block>
+    <!-- 搜索类型标签页 -->
+    <view class="search-tabs">
+      <view class="tab-item {{activeTab === 'video' ? 'active' : ''}}" bindtap="switchTab" data-tab="video">
+        视频 {{videos.length}}
+      </view>
+      <view class="tab-item {{activeTab === 'user' ? 'active' : ''}}" bindtap="switchTab" data-tab="user">
+        用户 {{users.length}}
+      </view>
     </view>
     
-    <!-- 加载状态 -->
-    <view wx:if="{{loading}}" class="loading-more">加载中...</view>
-    <view wx:if="{{!hasMore && videos.length > 0}}" class="no-more">没有更多了</view>
-    <view wx:if="{{!loading && videos.length === 0}}" class="no-results">
-      <text class="no-results-text">没有找到相关视频</text>
+    <!-- 视频搜索结果 -->
+    <view class="tab-content" wx:if="{{activeTab === 'video'}}">
+      <view class="video-grid" wx:if="{{videos.length}}">
+        <block wx:for="{{videos}}" wx:key="vid">
+          <view class="video-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+            <image class="video-cover" src="{{item.video.coverUrl}}" mode="aspectFill" />
+            <view class="video-title text-ellipsis">{{item.video.title}}</view>
+            <view class="video-meta">
+              <text class="play-count">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}} 播放</text>
+              <text class="danmu-count">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}} 弹幕</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 视频加载状态 -->
+      <view wx:if="{{loading && activeTab === 'video'}}" class="loading-more">加载中...</view>
+      <view wx:if="{{!hasMore && videos.length > 0 && activeTab === 'video'}}" class="no-more">没有更多了</view>
+      <view wx:if="{{!loading && videos.length === 0 && activeTab === 'video'}}" class="no-results">
+        <text class="no-results-text">没有找到相关视频</text>
+      </view>
+    </view>
+    
+    <!-- 用户搜索结果 -->
+    <view class="tab-content" wx:if="{{activeTab === 'user'}}">
+      <view class="user-list" wx:if="{{users.length}}">
+        <block wx:for="{{users}}" wx:key="uid">
+          <view class="user-item" bindtap="goUserSpace" data-uid="{{item.uid}}">
+            <image class="user-avatar" src="{{item.avatar || item.avatar_url || ''}}" mode="aspectFill" />
+            <view class="user-info">
+              <view class="user-name-row">
+                <text class="user-name">{{item.nickname || item.name || '用户'}}</text>
+                <view class="user-level">LV{{item.level || 0}}</view>
+              </view>
+              <view class="user-desc">{{item.description || item.desc || '0粉丝·0个视频'}}</view>
+            </view>
+            <view class="follow-btn" bindtap="followUser" data-uid="{{item.uid}}" catchtap="true">
+              <text class="follow-icon">+</text>
+              <text class="follow-text">关注</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 用户加载状态 -->
+      <view wx:if="{{loading && activeTab === 'user'}}" class="loading-more">加载中...</view>
+      <view wx:if="{{!hasMore && users.length > 0 && activeTab === 'user'}}" class="no-more">没有更多了</view>
+      <view wx:if="{{!loading && users.length === 0 && activeTab === 'user'}}" class="no-results">
+        <text class="no-results-text">没有找到相关用户</text>
+      </view>
     </view>
   </view>
 

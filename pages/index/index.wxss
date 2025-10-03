@@ -71,6 +71,11 @@
   -webkit-transform: translateZ(0);
   /* 优化视频渲染 */
   will-change: transform;
+  /* 减少重绘和回流 */
+  contain: layout style paint;
+  /* 优化合成层 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .large-video-overlay {
@@ -130,6 +135,44 @@
   bottom: 0;
   z-index: 10;
   cursor: pointer;
+}
+
+/* 大视频错误提示 */
+.video-error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.video-error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  color: #fff;
+  text-align: center;
+}
+
+.video-error-icon {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.video-error-text {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.video-error-tip {
+  font-size: 20rpx;
+  color: #ccc;
 }
 
 /* 大视频信息区域 */
@@ -359,7 +402,16 @@
   font-size: 32rpx;
   font-weight: bold;
 }
-.item { background: #fff; border-radius: 16rpx; overflow: hidden; box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.06); }
+.item { 
+  background: #fff; 
+  border-radius: 16rpx; 
+  overflow: hidden; 
+  box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.06);
+  /* 性能优化 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: layout style paint;
+}
 .thumb-wrap { 
   position: relative; 
   width: 100%; 

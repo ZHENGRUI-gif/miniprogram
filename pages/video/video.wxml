@@ -1,6 +1,26 @@
 <view class="container">
   <!-- 播放器 -->
-  <video id="player" src="{{playUrl}}" controls autoplay bindtimeupdate="onTimeUpdate" class="player"></video>
+  <video 
+    id="player" 
+    src="{{playUrl}}" 
+    controls 
+    autoplay 
+    bindtimeupdate="onTimeUpdate" 
+    binderror="onVideoError"
+    bindloadstart="onVideoLoadStart"
+    bindloadeddata="onVideoLoadedData"
+    class="player"
+  ></video>
+  
+  <!-- 视频加载错误提示 -->
+  <view class="video-error-overlay" wx:if="{{videoLoadError}}">
+    <view class="error-content">
+      <text class="error-icon">⚠️</text>
+      <text class="error-text">视频加载失败</text>
+      <text class="error-tip">请检查网络连接或稍后重试</text>
+      <button class="retry-btn" bindtap="retryVideo">重新加载</button>
+    </view>
+  </view>
 
   <!-- 标题与基础信息 -->
   <view class="card v-info">

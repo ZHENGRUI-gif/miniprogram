@@ -11,7 +11,8 @@ Page({
     related: [],
     danmus: [],
     socketOpen: false,
-    inputDm: ''
+    inputDm: '',
+    videoLoadError: false
   },
   onLoad(query) {
     const vid = Number(query.vid || 0);
@@ -186,6 +187,45 @@ Page({
   },
   formatDuration(seconds) {
     return handleTime(seconds);
+  },
+  
+  // 视频加载开始
+  onVideoLoadStart() {
+    console.log('视频开始加载');
+    this.setData({ videoLoadError: false });
+  },
+  
+  // 视频数据加载完成
+  onVideoLoadedData() {
+    console.log('视频数据加载完成');
+    this.setData({ videoLoadError: false });
+  },
+  
+  // 视频加载错误
+  onVideoError(e) {
+    console.error('视频加载失败:', e);
+    this.setData({ videoLoadError: true });
+    
+    // 显示错误提示
+    wx.showToast({
+      title: '视频加载失败',
+      icon: 'none',
+      duration: 3000
+    });
+  },
+  
+  // 重新加载视频
+  retryVideo() {
+    console.log('重新加载视频');
+    this.setData({ videoLoadError: false });
+    
+    // 重新设置视频源，触发重新加载
+    const currentUrl = this.data.playUrl;
+    this.setData({ playUrl: '' });
+    
+    setTimeout(() => {
+      this.setData({ playUrl: currentUrl });
+    }, 100);
   }
 });
 

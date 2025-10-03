@@ -51,6 +51,15 @@
               data-vid="{{item.video.vid}}"
               data-index="{{index}}"
             ></video>
+            
+            <!-- 视频加载错误提示 -->
+            <view class="video-error-overlay" wx:if="{{item.videoLoadError}}">
+              <view class="video-error-content">
+                <text class="video-error-icon">⚠️</text>
+                <text class="video-error-text">视频加载失败</text>
+                <text class="video-error-tip">点击查看详情</text>
+              </view>
+            </view>
             <view class="large-video-overlay">
               <view class="large-stats">
                 <view class="large-stat-item">

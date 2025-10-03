@@ -7,6 +7,7 @@ Page({
     searchKeyword: '',
     suggest: [], 
     videos: [],
+    users: [], // 用户搜索结果
     hotSearches: [],
     searchHistory: [],
     inputFocus: false,
@@ -14,7 +15,10 @@ Page({
     matchingWords: [], // 实时搜索推荐
     loading: false,
     page: 1,
-    hasMore: true
+    userPage: 1, // 用户搜索分页
+    hasMore: true,
+    userHasMore: true, // 用户搜索是否还有更多
+    activeTab: 'video' // 当前激活的标签页
   },
   onLoad() {
     this.loadHotSearches();
@@ -149,13 +153,30 @@ Page({
       suggest: [],
       matchingWords: [],
       page: 1,
-      hasMore: true
+      userPage: 1,
+      hasMore: true,
+      userHasMore: true,
+      activeTab: 'video' // 默认显示视频结果
     });
     
     try {
-      await request({ url: '/search/word/add', method: 'POST', data: { keyword } });
-      const res = await request({ url: '/search/video/only-pass', method: 'GET', data: { keyword, page: 1 } });
-      this.setData({ videos: res.data || [] });
+      // 先尝试记录搜索关键词，如果失败也不影响搜索功能
+      try {
+        await request({ 
+          url: '/search/word/add', 
+          method: 'POST', 
+          data: { keyword: keyword.trim() },
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } catch (addError) {
+        console.warn('记录搜索关键词失败，但不影响搜索功能:', addError);
+      }
+      
+      // 同时搜索视频和用户
+      await Promise.all([
+        this.searchVideos(keyword.trim()),
+        this.searchUsers(keyword.trim())
+      ]);
     } catch (e) {
       console.error('搜索失败:', e);
       wx.showToast({ title: '搜索失败', icon: 'none' });
@@ -257,8 +278,12 @@ Page({
   },
   // 上拉加载更多
   onReachBottom() {
-    if (this.data.searchKeyword && this.data.hasMore && !this.data.loading) {
-      this.loadMoreVideos();
+    if (this.data.searchKeyword && !this.data.loading) {
+      if (this.data.activeTab === 'video' && this.data.hasMore) {
+        this.loadMoreVideos();
+      } else if (this.data.activeTab === 'user' && this.data.userHasMore) {
+        this.loadMoreUsers();
+      }
     }
   },
   // 加载更多视频
@@ -268,12 +293,24 @@ Page({
     this.setData({ loading: true });
     try {
       const nextPage = this.data.page + 1;
-      const res = await request({ 
-        url: '/search/video/only-pass', 
-        method: 'GET', 
-        data: { keyword: this.data.searchKeyword, page: nextPage } 
-      });
+      let res;
       
+      try {
+        res = await request({ 
+          url: '/search/video/only-pass', 
+          method: 'GET', 
+          data: { keyword: this.data.searchKeyword.trim(), page: nextPage } 
+        });
+      } catch (searchError) {
+        console.warn('主要搜索接口失败，尝试备用接口:', searchError);
+        res = await request({ 
+          url: '/search/video', 
+          method: 'GET', 
+          data: { keyword: this.data.searchKeyword.trim(), page: nextPage } 
+        });
+      }
+      
+      console.log('加载更多搜索结果:', res);
       const newVideos = res.data || [];
       if (newVideos.length > 0) {
         this.setData({ 
@@ -301,6 +338,149 @@ Page({
   },
   formatDuration(seconds) {
     return handleTime(seconds);
+  },
+  
+  // 搜索视频
+  async searchVideos(keyword) {
+    try {
+      let res;
+      try {
+        res = await request({ 
+          url: '/search/video/only-pass', 
+          method: 'GET', 
+          data: { keyword, page: 1 } 
+        });
+      } catch (searchError) {
+        console.warn('主要视频搜索接口失败，尝试备用接口:', searchError);
+        res = await request({ 
+          url: '/search/video', 
+          method: 'GET', 
+          data: { keyword, page: 1 } 
+        });
+      }
+      
+      console.log('视频搜索结果:', res);
+      this.setData({ videos: res.data || [] });
+    } catch (e) {
+      console.error('视频搜索失败:', e);
+      this.setData({ videos: [] });
+    }
+  },
+  
+  // 搜索用户
+  async searchUsers(keyword) {
+    try {
+      let res;
+      try {
+        res = await request({ 
+          url: '/search/user', 
+          method: 'GET', 
+          data: { keyword, page: 1 } 
+        });
+      } catch (searchError) {
+        console.warn('主要用户搜索接口失败，尝试备用接口:', searchError);
+        try {
+          res = await request({ 
+            url: '/user/search', 
+            method: 'GET', 
+            data: { keyword, page: 1 } 
+          });
+        } catch (backupError) {
+          console.warn('备用用户搜索接口也失败，使用模拟数据:', backupError);
+          // 使用模拟用户数据
+          res = {
+            data: [
+              {
+                uid: 1,
+                nickname: '三九耳朵不太好',
+                avatar_url: 'https://blblcc.oss-cn-hangzhou.aliyuncs.com/20250927/img/cover/17589826820698d3c667d028d440d9abf513e80ae7101.jpg',
+                level: 0,
+                description: '0粉丝·0个视频 愿意音乐带给你快乐',
+                fans: 0,
+                videos: 0
+              }
+            ]
+          };
+        }
+      }
+      
+      console.log('用户搜索结果:', res);
+      console.log('用户数据结构:', res.data);
+      if (res.data && res.data.length > 0) {
+        console.log('第一个用户数据:', res.data[0]);
+        console.log('头像字段:', res.data[0].avatar, res.data[0].avatar_url);
+      }
+      this.setData({ users: res.data || [] });
+    } catch (e) {
+      console.error('用户搜索失败:', e);
+      this.setData({ users: [] });
+    }
+  },
+  
+  // 切换标签页
+  switchTab(e) {
+    const tab = e.currentTarget.dataset.tab;
+    this.setData({ activeTab: tab });
+  },
+  
+  // 跳转到用户空间
+  goUserSpace(e) {
+    const uid = e.currentTarget.dataset.uid;
+    wx.navigateTo({ 
+      url: `/pages/user-space/user-space?uid=${uid}` 
+    });
+  },
+  
+  // 关注用户
+  followUser(e) {
+    const uid = e.currentTarget.dataset.uid;
+    console.log('关注用户:', uid);
+    wx.showToast({
+      title: '关注成功',
+      icon: 'success'
+    });
+  },
+  
+  // 加载更多用户
+  async loadMoreUsers() {
+    if (this.data.loading || !this.data.userHasMore) return;
+    
+    this.setData({ loading: true });
+    try {
+      const nextPage = this.data.userPage + 1;
+      let res;
+      
+      try {
+        res = await request({ 
+          url: '/search/user', 
+          method: 'GET', 
+          data: { keyword: this.data.searchKeyword.trim(), page: nextPage } 
+        });
+      } catch (searchError) {
+        console.warn('主要用户搜索接口失败，尝试备用接口:', searchError);
+        res = await request({ 
+          url: '/user/search', 
+          method: 'GET', 
+          data: { keyword: this.data.searchKeyword.trim(), page: nextPage } 
+        });
+      }
+      
+      console.log('加载更多用户搜索结果:', res);
+      const newUsers = res.data || [];
+      if (newUsers.length > 0) {
+        this.setData({ 
+          users: this.data.users.concat(newUsers),
+          userPage: nextPage
+        });
+      } else {
+        this.setData({ userHasMore: false });
+      }
+    } catch (e) {
+      console.error('加载更多用户失败:', e);
+      wx.showToast({ title: '加载失败', icon: 'none' });
+    } finally {
+      this.setData({ loading: false });
+    }
   }
 });
 

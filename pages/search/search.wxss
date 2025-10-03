@@ -345,3 +345,123 @@
   white-space: nowrap; 
 }
 
+/* 搜索标签页样式 */
+.search-tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+  margin-bottom: 16rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.tab-item.active {
+  color: #fb7299;
+  font-weight: 600;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  background: #fb7299;
+  border-radius: 2rpx;
+}
+
+/* 标签页内容 */
+.tab-content {
+  padding: 0 20rpx;
+}
+
+/* 用户列表样式 */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.user-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.user-name {
+  font-size: 30rpx;
+  color: #222;
+  font-weight: 600;
+}
+
+.user-level {
+  background: #f0f0f0;
+  color: #666;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+}
+
+.user-desc {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.follow-btn {
+  background: #fb7299;
+  color: #fff;
+  padding: 12rpx 20rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.follow-icon {
+  font-size: 20rpx;
+  font-weight: bold;
+}
+
+.follow-text {
+  font-size: 24rpx;
+}
+
+

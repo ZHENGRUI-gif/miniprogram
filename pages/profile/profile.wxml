@@ -1,12 +1,84 @@
 <view class="container">
   <view class="card header">
     <image wx:if="{{userAvatar}}" class="avatar" src="{{userAvatar}}" mode="aspectFill" />
-    <view wx:else class="avatar placeholder">🙂</view>
+    <view wx:else class="avatar placeholder">
+      <text class="placeholder-icon">👤</text>
+    </view>
     <view class="info">
       <view class="name">{{user.nickname || '未登录'}}</view>
-      <view class="desc text-ellipsis">{{user.description}}</view>
+      <view class="desc text-ellipsis">{{user.description || '登录后享受更多功能'}}</view>
+    </view>
+    <!-- 切换账号按钮 -->
+    <view wx:if="{{hasLogin}}" class="switch-account-btn" bindtap="showSwitchAccount">
+      <text class="switch-icon">🔄</text>
+      <text class="switch-text">切换账号</text>
     </view>
   </view>
-  <view wx:if="{{!hasLogin}}" class="btn-primary" bindtap="goLogin">去登录</view>
+  
+  <!-- 未登录状态增强显示 -->
+  <view wx:if="{{!hasLogin}}" class="unlogged-section">
+    <view class="unlogged-card">
+      <view class="unlogged-icon">🔐</view>
+      <view class="unlogged-title">欢迎使用</view>
+      <view class="unlogged-desc">登录后可以享受更多个性化功能</view>
+      <view class="unlogged-features">
+        <view class="feature-item">
+          <text class="feature-icon">📱</text>
+          <text class="feature-text">个性化推荐</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">💾</text>
+          <text class="feature-text">收藏历史</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">⚙️</text>
+          <text class="feature-text">个人设置</text>
+        </view>
+      </view>
+      <view class="btn-primary unlogged-btn" bindtap="goLogin">
+        <text class="btn-text">立即登录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 切换账号弹窗 -->
+  <view class="switch-account-modal" wx:if="{{showSwitchModal}}" bindtap="hideSwitchAccount">
+    <view class="modal-content" catchtap="true">
+      <view class="modal-header">
+        <text class="modal-title">切换账号</text>
+        <text class="modal-close" bindtap="hideSwitchAccount">×</text>
+      </view>
+      
+      <view class="account-list">
+        <!-- 当前账号 -->
+        <view class="current-account" wx:if="{{currentUser}}">
+          <image class="account-avatar" src="{{currentUser.avatar || currentUser.avatar_url || currentUser.head_image}}" mode="aspectFill" />
+          <view class="account-info">
+            <text class="account-name">{{currentUser.nickname || currentUser.name}}</text>
+            <text class="account-desc">当前账号</text>
+          </view>
+          <view class="current-badge">当前</view>
+        </view>
+        
+        <!-- 其他账号 -->
+        <view class="other-accounts">
+          <view class="account-item" wx:for="{{otherAccounts}}" wx:key="uid" bindtap="switchToAccount" data-account="{{item}}">
+            <image class="account-avatar" src="{{item.avatar || item.avatar_url || item.head_image}}" mode="aspectFill" />
+            <view class="account-info">
+              <text class="account-name">{{item.nickname || item.name}}</text>
+              <text class="account-desc">{{item.email || item.phone || '用户'}}</text>
+            </view>
+            <view class="switch-btn">切换</view>
+          </view>
+        </view>
+        
+        <!-- 添加新账号 -->
+        <view class="add-account" bindtap="addNewAccount">
+          <text class="add-icon">+</text>
+          <text class="add-text">添加新账号</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>
 

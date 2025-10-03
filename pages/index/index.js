@@ -290,23 +290,31 @@ Page({
     const scrollTop = e.detail.scrollTop;
     const currentTime = Date.now();
     
-    // 节流处理：限制执行频率为每100ms一次
-    if (currentTime - this.data.lastScrollTime < 100) {
+    // 节流处理：限制执行频率为每150ms一次，减少频繁调用
+    if (currentTime - this.data.lastScrollTime < 150) {
       return;
     }
     
-    // 更新滚动时间
-    this.setData({ lastScrollTime: currentTime });
+    // 更新滚动时间（不使用setData，直接更新data）
+    this.data.lastScrollTime = currentTime;
+    
+    // 批量更新数据，减少setData调用
+    const updateData = {};
     
     // 当滚动超过500rpx时显示回到顶部按钮
     const showBackToTop = scrollTop > 500;
     if (this.data.showBackToTop !== showBackToTop) {
-      this.setData({ showBackToTop });
+      updateData.showBackToTop = showBackToTop;
     }
     
-    // 更新滚动位置（仅在需要时更新）
-    if (Math.abs(this.data.scrollTop - scrollTop) > 10) {
-      this.setData({ scrollTop });
+    // 更新滚动位置（仅在变化较大时更新）
+    if (Math.abs(this.data.scrollTop - scrollTop) > 50) {
+      updateData.scrollTop = scrollTop;
+    }
+    
+    // 如果有需要更新的数据，才调用setData
+    if (Object.keys(updateData).length > 0) {
+      this.setData(updateData);
     }
     
     // 延迟检查视频可见性，避免频繁执行
@@ -316,7 +324,7 @@ Page({
     
     this.data.scrollThrottleTimer = setTimeout(() => {
       this.checkVideoVisibility();
-    }, 200);
+    }, 300); // 增加延迟时间，减少检查频率
   },
   
   // 加载更多视频（无限滚动）
@@ -394,18 +402,18 @@ Page({
     const displayVideos = this.data.displayVideos;
     const currentPlayingVideo = this.data.currentPlayingVideo;
     
-    // 智能检查范围：如果没有当前播放视频，检查所有大视频；否则只检查附近的大视频
+    // 智能检查范围：进一步优化检查逻辑
     let startIndex, endIndex;
     
     if (currentPlayingVideo === null) {
-      // 没有播放视频时，检查所有大视频
+      // 没有播放视频时，只检查前几个可能的大视频位置
       startIndex = 0;
-      endIndex = displayVideos.length;
+      endIndex = Math.min(displayVideos.length, 50); // 限制检查范围
     } else {
       // 有播放视频时，只检查附近的大视频
-      const checkRange = 3; // 检查范围：当前视频前后3个
-      startIndex = Math.max(0, currentPlayingVideo - checkRange);
-      endIndex = Math.min(displayVideos.length, currentPlayingVideo + checkRange + 1);
+      const checkRange = 2; // 减少检查范围：当前视频前后2个
+      startIndex = Math.max(0, currentPlayingVideo - checkRange * 10);
+      endIndex = Math.min(displayVideos.length, currentPlayingVideo + checkRange * 10);
     }
     
     // 批量查询，减少DOM操作
@@ -421,6 +429,12 @@ Page({
     
     if (queries.length === 0) return;
     
+    // 限制同时检查的视频数量，避免性能问题
+    if (queries.length > 3) {
+      queries.splice(3);
+      videoIndices.splice(3);
+    }
+    
     // 一次性查询所有视频位置
     const query = wx.createSelectorQuery();
     queries.forEach(selector => {
@@ -431,22 +445,12 @@ Page({
       const windowInfo = wx.getWindowInfo();
       const windowHeight = windowInfo.windowHeight;
       
-      console.log(`🔍 检查 ${queries.length} 个大视频的可见性，当前播放: ${currentPlayingVideo}`);
-      
       res.forEach((rect, i) => {
         if (rect) {
           const index = videoIndices[i];
           const isVisible = rect.top < windowHeight * 0.5 && rect.bottom > windowHeight * 0.5;
           
-          console.log(`视频 ${index} 可见性:`, {
-            rect: rect,
-            windowHeight: windowHeight,
-            isVisible: isVisible,
-            currentPlaying: currentPlayingVideo
-          });
-          
           if (isVisible && currentPlayingVideo !== index) {
-            console.log(`🎥 视频 ${index} 进入可视区域，开始播放`);
             // 暂停当前播放的视频
             if (currentPlayingVideo !== null) {
               this.pauseVideo(currentPlayingVideo);
@@ -454,7 +458,6 @@ Page({
             // 播放当前视频
             this.playVideo(index);
           } else if (!isVisible && currentPlayingVideo === index) {
-            console.log(`⏸️ 视频 ${index} 离开可视区域，暂停播放`);
             // 暂停不在可视区域的视频
             this.pauseVideo(index);
           }
@@ -465,7 +468,6 @@ Page({
   
   // 播放视频（优化版）
   playVideo(index) {
-    console.log(`🎥 尝试播放视频 ${index}`);
     const videoContext = wx.createVideoContext(`large-video-${index}`, this);
     if (videoContext) {
       try {
@@ -473,12 +475,9 @@ Page({
         this.setData({
           currentPlayingVideo: index
         });
-        console.log(`✅ 成功播放视频 ${index}`);
       } catch (error) {
-        console.error(`❌ 播放视频 ${index} 失败:`, error);
+        console.error(`播放视频 ${index} 失败:`, error);
       }
-    } else {
-      console.error(`❌ 无法创建视频上下文，视频ID: large-video-${index}`);
     }
   },
   
