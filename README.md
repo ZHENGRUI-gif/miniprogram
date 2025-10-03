@@ -1,0 +1,2 @@
+需要在project.config.json的29行填入自己的wxid
+miniprogram/utils/config.js现在里面是我的本地ip，需要启动后端后换成你自己的
