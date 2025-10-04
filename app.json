@@ -9,7 +9,8 @@
     "pages/debug/debug",
     "pages/inbox/inbox",
     "pages/chat/chat",
-    "pages/user-space/user-space"
+    "pages/user-space/user-space",
+    "pages/likes/likes"
   ],
   "window": {
     "navigationBarTitleText": "blbl",

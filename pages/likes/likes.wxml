@@ -1,0 +1,109 @@
+<view class="container">
+  <!-- 头部操作栏 -->
+  <view class="header">
+    <view class="title">收到的赞</view>
+    <view class="organize-btn" bindtap="toggleOrganize">
+      <text class="btn-text">{{isOrganized ? '普通模式' : '整理模式'}}</text>
+    </view>
+  </view>
+
+  <!-- 普通模式：显示所有点赞记录 -->
+  <view wx:if="{{!isOrganized}}" class="like-list">
+    <block wx:for="{{likeList}}" wx:key="index">
+      <view class="like-item" bindtap="openVideo" data-vid="{{item.video.vid}}">
+        <view class="user-info">
+          <image 
+            wx:if="{{item.user.avatar_url}}" 
+            class="user-avatar" 
+            src="{{item.user.avatar_url}}" 
+            mode="aspectFill" 
+          />
+          <view wx:else class="user-avatar placeholder">👤</view>
+          <view class="user-details">
+            <view class="user-name">{{item.user.nickname || '用户' + item.user.uid}}</view>
+            <view class="like-time">{{item.formattedTime}}</view>
+          </view>
+        </view>
+        
+        <view class="video-info">
+          <image class="video-cover" src="{{item.video.coverUrl || item.video.cover_url}}" mode="aspectFill" />
+          <view class="video-details">
+            <view class="video-title text-ellipsis">{{item.video.title}}</view>
+            <view class="video-stats">
+              <text class="stat">▶ {{formatNum(item.stats.play)}}</text>
+              <text class="stat">👍 {{formatNum(item.stats.good)}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading">
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <view wx:elif="{{!hasMore && likeList.length > 0}}" class="no-more">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+    
+    <view wx:elif="{{likeList.length === 0 && !loading}}" class="empty">
+      <text class="empty-text">暂无收到的赞</text>
+    </view>
+  </view>
+
+  <!-- 整理模式：按视频分组显示 -->
+  <view wx:else class="grouped-list">
+    <block wx:for="{{groupedLikes}}" wx:key="videoId" wx:for-item="group" wx:for-index="videoId">
+      <view class="group-item">
+        <!-- 视频信息头部 -->
+        <view class="group-header" bindtap="toggleGroup" data-video-id="{{videoId}}">
+          <view class="video-summary">
+            <image class="group-cover" src="{{group.video.coverUrl || group.video.cover_url}}" mode="aspectFill" />
+            <view class="group-info">
+              <view class="group-title text-ellipsis">{{group.video.title}}</view>
+              <view class="group-stats">
+                <text class="stat">▶ {{formatNum(group.stats.play)}}</text>
+                <text class="stat">👍 {{formatNum(group.stats.good)}}</text>
+                <text class="stat">收到 {{group.likes.length}} 个赞</text>
+              </view>
+            </view>
+          </view>
+          <view class="expand-icon {{expandedGroups[videoId] ? 'expanded' : ''}}">▼</view>
+        </view>
+        
+        <!-- 点赞用户列表 -->
+        <view wx:if="{{expandedGroups[videoId]}}" class="likes-detail">
+          <block wx:for="{{group.likes}}" wx:key="index" wx:for-item="like">
+            <view class="like-user" bindtap="openUserSpace" data-uid="{{like.user.uid}}">
+              <image 
+                wx:if="{{like.user.avatar_url}}" 
+                class="like-avatar" 
+                src="{{like.user.avatar_url}}" 
+                mode="aspectFill" 
+              />
+              <view wx:else class="like-avatar placeholder">👤</view>
+              <view class="like-user-info">
+                <view class="like-user-name">{{like.user.nickname || '用户' + like.user.uid}}</view>
+                <view class="like-user-time">{{like.formattedTime}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading">
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <view wx:elif="{{!hasMore && likeList.length > 0}}" class="no-more">
+      <text class="no-more-text">没有更多了</text>
+    </view>
+    
+    <view wx:elif="{{likeList.length === 0 && !loading}}" class="empty">
+      <text class="empty-text">暂无收到的赞</text>
+    </view>
+  </view>
+</view>

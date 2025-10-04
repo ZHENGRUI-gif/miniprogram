@@ -41,9 +41,25 @@ Page({
     if (!uid) return;
     wx.navigateTo({ url: `/pages/chat/chat?uid=${uid}` });
   },
-  goReply() {},
-  goLikes() {},
-  goFans() {}
+  goReply() {
+    // TODO: 实现回复与@功能
+    wx.showToast({
+      title: '功能开发中',
+      icon: 'none'
+    });
+  },
+  goLikes() {
+    wx.navigateTo({
+      url: '/pages/likes/likes'
+    });
+  },
+  goFans() {
+    // TODO: 实现新增粉丝功能
+    wx.showToast({
+      title: '功能开发中',
+      icon: 'none'
+    });
+  }
 });
 
 

@@ -6,7 +6,7 @@
     </view>
     <view class="q-item" bindtap="goLikes">
       <text class="q-icon">👍</text>
-      <text class="q-text">收到喜欢</text>
+      <text class="q-text">收到赞</text>
     </view>
     <view class="q-item" bindtap="goFans">
       <text class="q-icon">👤</text>
