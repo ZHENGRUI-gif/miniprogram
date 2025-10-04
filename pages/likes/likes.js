@@ -1,5 +1,5 @@
 const { request } = require('../../utils/request');
-const { handleTime } = require('../../utils/time');
+const { formatTimestamp } = require('../../utils/time');
 
 Page({
   data: {
@@ -101,7 +101,7 @@ Page({
   // 格式化时间
   formatTime(timeStr) {
     if (!timeStr) return '';
-    return handleTime(timeStr);
+    return formatTimestamp(timeStr);
   },
 
   // 切换整理状态

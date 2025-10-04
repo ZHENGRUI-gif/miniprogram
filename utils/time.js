@@ -107,10 +107,115 @@ function needHourFormat(time) {
     return time && time >= 3600; // 超过1小时
 }
 
+/**
+ * 格式化时间戳为相对时间
+ * @param {String|Number} timestamp 时间戳字符串或数字
+ * @returns {String} 格式化后的相对时间
+ */
+function formatTimestamp(timestamp) {
+    if (!timestamp) return '';
+    
+    // 处理时间戳格式
+    let date;
+    if (typeof timestamp === 'string') {
+        // 如果是字符串，尝试解析
+        date = new Date(timestamp);
+    } else if (typeof timestamp === 'number') {
+        // 如果是数字，判断是秒还是毫秒
+        if (timestamp > 1000000000000) {
+            // 毫秒时间戳
+            date = new Date(timestamp);
+        } else {
+            // 秒时间戳
+            date = new Date(timestamp * 1000);
+        }
+    } else {
+        return '';
+    }
+    
+    // 检查日期是否有效
+    if (isNaN(date.getTime())) {
+        return '';
+    }
+    
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    
+    // 计算时间差
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+    
+    // 根据时间差返回相对时间
+    if (seconds < 60) {
+        return '刚刚';
+    } else if (minutes < 60) {
+        return `${minutes}分钟前`;
+    } else if (hours < 24) {
+        return `${hours}小时前`;
+    } else if (days < 30) {
+        return `${days}天前`;
+    } else if (months < 12) {
+        return `${months}个月前`;
+    } else {
+        return `${years}年前`;
+    }
+}
+
+/**
+ * 格式化时间戳为具体日期时间
+ * @param {String|Number} timestamp 时间戳字符串或数字
+ * @param {String} format 格式类型：'date', 'datetime', 'time'
+ * @returns {String} 格式化后的日期时间
+ */
+function formatDateTime(timestamp, format = 'datetime') {
+    if (!timestamp) return '';
+    
+    // 处理时间戳格式
+    let date;
+    if (typeof timestamp === 'string') {
+        date = new Date(timestamp);
+    } else if (typeof timestamp === 'number') {
+        if (timestamp > 1000000000000) {
+            date = new Date(timestamp);
+        } else {
+            date = new Date(timestamp * 1000);
+        }
+    } else {
+        return '';
+    }
+    
+    if (isNaN(date.getTime())) {
+        return '';
+    }
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    switch (format) {
+        case 'date':
+            return `${year}-${month}-${day}`;
+        case 'time':
+            return `${hours}:${minutes}:${seconds}`;
+        case 'datetime':
+        default:
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+    }
+}
+
 // 小程序不支持ES6 export，使用module.exports
 module.exports = {
     handleTime,
     handleLongTime,
     formatDuration,
-    needHourFormat
+    needHourFormat,
+    formatTimestamp,
+    formatDateTime
 };
