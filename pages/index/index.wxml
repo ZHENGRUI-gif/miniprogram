@@ -8,7 +8,15 @@
       <text class="icon">🔍</text>
       <text class="placeholder">{{placeholder}}</text>
     </view>
-    <view class="inbox" bindtap="goInbox">✉️</view>
+    <view class="inbox" bindtap="goInbox">
+      ✉️
+      <view wx:if="{{userInfo && msgUnread > 0}}" class="red-num--dynamic">
+        {{msgUnread > 99 ? '99+' : msgUnread}}
+      </view>
+    </view>
+    <view class="debug-btn" bindtap="checkWebSocketStatus">
+      🔧
+    </view>
   </view>
 
   <scroll-view class="tabs" scroll-x="true" enable-flex="true">

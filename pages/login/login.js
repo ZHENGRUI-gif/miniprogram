@@ -19,16 +19,28 @@ Page({
       const token = res.data?.token || res.token;
       if (token) {
         wx.setStorageSync('teri_token', token);
+        
+        // 调用app的登录方法，连接WebSocket
+        const app = getApp();
+        if (app && app.onLogin) {
+          await app.onLogin(token);
+        }
+        
         // 登录成功后获取用户信息
         try {
           const userRes = await request({ url: '/user/personal/info' });
           if (userRes && userRes.data) {
             wx.setStorageSync('userInfo', userRes.data);
+            app.globalData.userInfo = userRes.data;
           }
         } catch (e) {
           console.error('获取用户信息失败:', e);
         }
-        wx.switchTab ? wx.switchTab({ url: '/pages/index/index' }) : wx.reLaunch({ url: '/pages/index/index' });
+        
+        wx.showToast({ title: '登录成功', icon: 'success' });
+        setTimeout(() => {
+          wx.switchTab ? wx.switchTab({ url: '/pages/index/index' }) : wx.reLaunch({ url: '/pages/index/index' });
+        }, 1000);
       } else {
         wx.showToast({ title: '登录失败', icon: 'none' });
       }

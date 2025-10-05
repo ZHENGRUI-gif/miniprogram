@@ -1,31 +1,44 @@
-<view class="container">
-  <view class="header">
-    <text class="title">API调试页面</text>
+<view class="debug-container">
+  <view class="debug-header">
+    <text class="debug-title">WebSocket调试工具</text>
   </view>
-  
-  <view class="button-group">
-    <button class="btn" bindtap="testBasicConnection">测试基本连接</button>
-    <button class="btn" bindtap="testEndpoints">测试 /api/endpoints</button>
-    <button class="btn" bindtap="testVideoInfo">测试视频信息</button>
-    <button class="btn" bindtap="testPlayUrl">测试播放接口</button>
-    <button class="btn" bindtap="testDanmuList">测试弹幕列表</button>
-    <button class="btn" bindtap="testUserInfo">测试用户信息</button>
-    <button class="btn" bindtap="testWebSocket">测试WebSocket</button>
-    <button class="btn" bindtap="clearLogs">清空日志</button>
-    <button class="btn" bindtap="copyLogs">复制日志</button>
-  </view>
-  
-  <view class="logs">
-    <view class="log-title">调试日志：</view>
-    <scroll-view class="log-content" scroll-y="true">
-      <text wx:for="{{logs}}" wx:key="*this" class="log-item">{{item}}</text>
-    </scroll-view>
-  </view>
-  
-  <view class="results">
-    <view class="result-title">测试结果：</view>
-    <view class="result-content">
-      <text>{{testResults}}</text>
+
+  <!-- WebSocket状态 -->
+  <view class="status-section">
+    <text class="section-title">连接状态</text>
+    <view class="status-item">
+      <text>连接状态: {{wsStatus.isConnected ? '已连接' : '未连接'}}</text>
     </view>
+    <view class="status-item">
+      <text>连接中: {{wsStatus.isConnecting ? '是' : '否'}}</text>
+    </view>
+    <view class="status-item">
+      <text>重连次数: {{wsStatus.reconnectAttempts}}/{{wsStatus.maxAttempts}}</text>
+    </view>
+    <view class="status-item">
+      <text>Token状态: {{wsStatus.token}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="button-section">
+    <button class="debug-btn" bindtap="connectWebSocket">连接WebSocket</button>
+    <button class="debug-btn" bindtap="disconnectWebSocket">断开连接</button>
+    <button class="debug-btn" bindtap="testHttpConnection">测试HTTP</button>
+    <button class="debug-btn" bindtap="testWebSocketConnection">测试WebSocket</button>
+    <button class="debug-btn" bindtap="runDiagnostic">网络诊断</button>
+    <button class="debug-btn" bindtap="checkToken">检查Token</button>
+    <button class="debug-btn" bindtap="refreshStatus">刷新状态</button>
+    <button class="debug-btn" bindtap="clearLogs">清除日志</button>
+  </view>
+
+  <!-- 日志区域 -->
+  <view class="logs-section">
+    <text class="section-title">调试日志</text>
+    <scroll-view class="logs-container" scroll-y="true">
+      <view class="log-item" wx:for="{{logs}}" wx:key="index">
+        <text class="log-text">{{item}}</text>
+      </view>
+    </scroll-view>
   </view>
 </view>

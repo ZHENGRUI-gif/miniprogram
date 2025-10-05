@@ -15,7 +15,58 @@
 .avatar-emoji { font-size: 28rpx; }
 .search { flex: 1; display: flex; align-items: center; background: #fff; border-radius: 100rpx; padding: 12rpx 20rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04); color: #888; }
 .search .icon { margin-right: 8rpx; }
-.inbox { margin-left: 16rpx; }
+.inbox { 
+  margin-left: 16rpx; 
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60rpx;
+  height: 60rpx;
+  font-size: 32rpx;
+}
+
+/* 小红点数字样式 - 参考blbl项目的.red-num--dynamic */
+.red-num--dynamic {
+  cursor: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  z-index: 1;
+  position: absolute;        /* 绝对定位 */
+  top: -10rpx;              /* 向上偏移10rpx */
+  left: 50rpx;              /* 向右偏移50rpx */
+  padding: 0 8rpx;          /* 内边距 */
+  min-width: 30rpx;         /* 最小宽度 */
+  border-radius: 20rpx;     /* 圆角 */
+  background-color: #ff4757; /* 红色背景 */
+  color: #fff;              /* 白色文字 */
+  font-size: 24rpx;         /* 字体大小 */
+  text-align: center;       /* 文字居中 */
+  line-height: 1.2;         /* 行高 */
+  box-shadow: 0 2rpx 8rpx rgba(255, 71, 87, 0.3);
+}
+
+/* 调试按钮样式 */
+.debug-btn {
+  margin-left: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60rpx;
+  height: 60rpx;
+  font-size: 32rpx;
+  background: #f0f0f0;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.debug-btn:active {
+  background: #e0e0e0;
+  transform: scale(0.95);
+}
+
 
 .tabs { white-space: nowrap; padding: 8rpx 12rpx; }
 .tab { display: inline-block; padding: 12rpx 20rpx; margin: 0 8rpx; color: #666; }

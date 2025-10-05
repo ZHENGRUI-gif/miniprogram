@@ -165,57 +165,11 @@ function formatTimestamp(timestamp) {
     }
 }
 
-/**
- * 格式化时间戳为具体日期时间
- * @param {String|Number} timestamp 时间戳字符串或数字
- * @param {String} format 格式类型：'date', 'datetime', 'time'
- * @returns {String} 格式化后的日期时间
- */
-function formatDateTime(timestamp, format = 'datetime') {
-    if (!timestamp) return '';
-    
-    // 处理时间戳格式
-    let date;
-    if (typeof timestamp === 'string') {
-        date = new Date(timestamp);
-    } else if (typeof timestamp === 'number') {
-        if (timestamp > 1000000000000) {
-            date = new Date(timestamp);
-        } else {
-            date = new Date(timestamp * 1000);
-        }
-    } else {
-        return '';
-    }
-    
-    if (isNaN(date.getTime())) {
-        return '';
-    }
-    
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    
-    switch (format) {
-        case 'date':
-            return `${year}-${month}-${day}`;
-        case 'time':
-            return `${hours}:${minutes}:${seconds}`;
-        case 'datetime':
-        default:
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
-    }
-}
-
 // 小程序不支持ES6 export，使用module.exports
 module.exports = {
     handleTime,
     handleLongTime,
     formatDuration,
     needHourFormat,
-    formatTimestamp,
-    formatDateTime
+    formatTimestamp
 };

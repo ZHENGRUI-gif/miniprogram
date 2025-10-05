@@ -1,0 +1,36 @@
+<view class="message-container">
+
+
+  <!-- 消息列表 -->
+  <view class="message-list">
+    <view 
+      class="message-item" 
+      wx:for="{{msgTypes}}" 
+      wx:key="index"
+      data-index="{{index}}"
+      bindtap="navigateToMsg"
+      bindlongpress="clearUnread"
+    >
+      <view class="item-content">
+        <view class="item-icon">{{item.icon}}</view>
+        <view class="item-info">
+          <text class="item-name">{{item.name}}</text>
+          <text class="item-desc">点击查看详情</text>
+        </view>
+        <view class="item-actions">
+          <view class="unread-badge" wx:if="{{msgUnread[index] > 0}}">
+            {{msgUnread[index] > 99 ? '99+' : msgUnread[index]}}
+          </view>
+          <text class="arrow">></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{totalUnread === 0}}">
+    <view class="empty-icon">📭</view>
+    <text class="empty-text">暂无未读消息</text>
+    <text class="empty-desc">有新消息时会在这里显示</text>
+  </view>
+</view>

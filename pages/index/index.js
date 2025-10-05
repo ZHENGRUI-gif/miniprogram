@@ -22,12 +22,14 @@ Page({
     videoContexts: {}, // 视频上下文对象
     scrollTop: 0, // 滚动位置
     lastScrollTime: 0, // 上次滚动时间
-    scrollThrottleTimer: null // 滚动节流定时器
+    scrollThrottleTimer: null, // 滚动节流定时器
+    msgUnread: 0, // 未读消息数量
   },
   onShow() {
     this.fetchFeed();
     this.checkLoginStatus();
     this.testDurationFormatting();
+    this.updateMsgUnread(); // 更新消息未读数量
     
     // 延迟检查视频可见性，确保页面渲染完成
     setTimeout(() => {
@@ -103,6 +105,176 @@ Page({
   },
   goInbox() {
     wx.navigateTo({ url: '/pages/inbox/inbox' });
+  },
+
+  // 计算消息未读数 - 参考blbl项目的实现
+  updateMsgUnread() {
+    const app = getApp();
+    if (app && app.globalData) {
+      let count = 0;
+      for (let i = 0; i < 5; i++) {  // 只计算前5种消息类型
+        count += app.globalData.msgUnread[i];
+      }
+      
+      console.log('更新消息未读数量:', { 
+        count, 
+        msgUnread: app.globalData.msgUnread,
+        msgTypes: app.globalData.msgTypeNames 
+      });
+      
+      this.setData({
+        msgUnread: count
+      });
+    }
+  },
+
+  // 页面消息更新回调
+  onMsgUpdate() {
+    this.updateMsgUnread();
+  },
+
+  // 检查WebSocket连接状态
+  checkWebSocketStatus() {
+    const app = getApp();
+    const WebSocketManager = require('../../utils/websocket');
+    const wsStatus = WebSocketManager.getConnectionStatus();
+    
+    // 检查存储中的token
+    const teriToken = wx.getStorageSync('teri_token');
+    const normalToken = wx.getStorageSync('token');
+    
+    const statusInfo = {
+      isConnected: wsStatus.isConnected,
+      isConnecting: wsStatus.isConnecting,
+      reconnectAttempts: wsStatus.reconnectAttempts,
+      maxAttempts: wsStatus.maxReconnectAttempts,
+      globalWsConnected: app.globalData.wsConnected,
+      globalToken: app.globalData.token ? '已设置' : '未设置',
+      wsManagerToken: wsStatus.token,
+      shouldReconnect: wsStatus.shouldReconnect,
+      hasConnectionTimeout: wsStatus.hasConnectionTimeout,
+      teriToken: teriToken ? '已设置' : '未设置',
+      normalToken: normalToken ? '已设置' : '未设置',
+      msgUnread: app.globalData.msgUnread,
+      totalUnread: app.getTotalUnreadCount()
+    };
+    
+    console.log('WebSocket连接状态:', statusInfo);
+    
+    const content = `连接状态: ${statusInfo.isConnected ? '已连接' : (statusInfo.isConnecting ? '连接中' : '未连接')}
+重连次数: ${statusInfo.reconnectAttempts}/${statusInfo.maxAttempts}
+全局状态: ${statusInfo.globalWsConnected ? '已连接' : '未连接'}
+允许重连: ${statusInfo.shouldReconnect ? '是' : '否'}
+连接超时: ${statusInfo.hasConnectionTimeout ? '是' : '否'}
+全局Token: ${statusInfo.globalToken}
+WS管理器Token: ${statusInfo.wsManagerToken}
+teri_token: ${statusInfo.teriToken}
+token: ${statusInfo.normalToken}
+未读消息: ${statusInfo.msgUnread.join(', ')}
+总未读数: ${statusInfo.totalUnread}`;
+    
+    wx.showModal({
+      title: 'WebSocket状态',
+      content: content,
+      confirmText: '重新连接',
+      cancelText: '关闭',
+      success: (res) => {
+        if (res.confirm) {
+          this.reconnectWebSocket();
+        }
+      }
+    });
+  },
+
+  // 重新连接WebSocket
+  async reconnectWebSocket() {
+    const app = getApp();
+    const token = app.globalData.token;
+    
+    if (!token) {
+      // 如果没有token，提供设置token的选项
+      wx.showModal({
+        title: '没有Token',
+        content: '当前没有登录token，是否要手动设置一个测试token？',
+        confirmText: '设置Token',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.setTestToken();
+          }
+        }
+      });
+      return;
+    }
+    
+    wx.showLoading({
+      title: '连接中...'
+    });
+    
+    // 先断开现有连接
+    const WebSocketManager = require('../../utils/websocket');
+    WebSocketManager.disconnect();
+    
+    // 等待一段时间后重新连接
+    setTimeout(async () => {
+      try {
+        // 重新启用重连
+        WebSocketManager.shouldReconnect = true;
+        WebSocketManager.reconnectAttempts = 0;
+        
+        await WebSocketManager.connect();
+        
+        wx.hideLoading();
+        wx.showToast({
+          title: '重连成功',
+          icon: 'success'
+        });
+        
+        this.updateMsgUnread();
+      } catch (error) {
+        wx.hideLoading();
+        wx.showToast({
+          title: '重连失败',
+          icon: 'error'
+        });
+        console.error('重连失败:', error);
+      }
+    }, 1000);
+  },
+
+  // 设置测试Token
+  setTestToken() {
+    wx.showModal({
+      title: '设置测试Token',
+      content: '请输入一个测试token（可以是任意字符串）',
+      editable: true,
+      placeholderText: '输入token',
+      success: (res) => {
+        if (res.confirm && res.content) {
+          const testToken = res.content.trim();
+          if (testToken) {
+            // 设置测试token
+            const app = getApp();
+            app.globalData.token = testToken;
+            wx.setStorageSync('teri_token', testToken);
+            
+            // 同步到WebSocket管理器
+            const WebSocketManager = require('../../utils/websocket');
+            WebSocketManager.token = testToken;
+            
+            wx.showToast({
+              title: 'Token已设置',
+              icon: 'success'
+            });
+            
+            // 尝试连接WebSocket
+            setTimeout(() => {
+              this.reconnectWebSocket();
+            }, 1000);
+          }
+        }
+      }
+    });
   },
   // 轮播图点击事件
   onBannerTap(e) {

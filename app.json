@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/follow/follow",
+    "pages/message/message",
     "pages/profile/profile",
     "pages/login/login",
     "pages/video/video",
@@ -26,6 +27,7 @@
     "list": [
       { "pagePath": "pages/index/index", "text": "首页" },
       { "pagePath": "pages/follow/follow", "text": "关注" },
+      { "pagePath": "pages/message/message", "text": "消息" },
       { "pagePath": "pages/profile/profile", "text": "我的" }
     ]
   },
