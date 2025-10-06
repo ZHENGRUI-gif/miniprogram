@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText": "视频"
+  "navigationBarTitleText": "视频",
+  "usingComponents": {
+    "like-button": "/components/like-button/like-button"
+  }
 }
 

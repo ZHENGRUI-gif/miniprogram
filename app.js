@@ -1,9 +1,12 @@
 const WebSocketManager = require('./utils/websocket');
+const config = require('./utils/config');
 
 App({
   globalData: {
     token: '',
     userInfo: null,
+    // 后端API基础地址
+    baseUrl: config.baseURL,
     // 未读消息数组，对应6种消息类型：['reply', 'at', 'love', 'system', 'whisper', 'dynamic']
     msgUnread: [0, 0, 0, 0, 0, 0],
     // 消息类型名称
@@ -13,7 +16,6 @@ App({
   },
   onLaunch() {
     try {
-      // 按照blbl项目的token获取方式，优先检查teri_token
       const token = wx.getStorageSync('teri_token') || wx.getStorageSync('token') || '';
       this.globalData.token = token;
       

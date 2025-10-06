@@ -1,0 +1,33 @@
+<!-- 点赞按钮组件 -->
+<view class="like-container">
+  <!-- 点赞GIF动画 -->
+  <view class="dianzan-gif {{isGifShow ? 'gif-show' : 'gif-hide'}}" wx:if="{{gifDisplay}}">
+    <image src="/assets/images/dianzan.gif" class="gif-image" mode="aspectFit"></image>
+  </view>
+  
+  <!-- 点赞按钮 -->
+  <view class="like-button {{isLiked ? 'liked' : ''}}" bindtap="onLikeTap">
+    <view class="icon-wrapper">
+      <text class="iconfont {{isLiked ? 'icon-dianzan1' : 'icon-dianzan'}}"></text>
+    </view>
+    <text class="like-count">{{likeCount}}</text>
+  </view>
+  
+  <!-- 点踩按钮 -->
+  <view class="dislike-button {{isDisliked ? 'disliked' : ''}}" bindtap="onDislikeTap">
+    <view class="icon-wrapper">
+      <text class="iconfont {{isDisliked ? 'icon-cai1' : 'icon-cai'}}"></text>
+    </view>
+    <text class="dislike-count">{{dislikeCount}}</text>
+  </view>
+  
+  <!-- 粒子爆炸效果 -->
+  <view class="particle-container" wx:if="{{showParticles}}">
+    <view 
+      class="particle" 
+      wx:for="{{particles}}" 
+      wx:key="index"
+      style="left: {{item.x}}px; top: {{item.y}}px; animation-delay: {{item.delay}}ms;"
+    ></view>
+  </view>
+</view>

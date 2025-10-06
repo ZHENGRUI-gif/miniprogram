@@ -51,10 +51,16 @@
 
   <!-- 互动操作区 -->
   <view class="card actions">
-    <view class="act">
-      <text class="icon">👍</text>
-      <text class="txt">点赞</text>
-    </view>
+    <!-- 点赞组件 -->
+    <like-button
+      video-id="{{vid}}"
+      is-liked="{{video.isLiked || false}}"
+      is-disliked="{{video.isDisliked || false}}"
+      like-count="{{video.stats.love || 0}}"
+      dislike-count="{{video.stats.dislike || 0}}"
+      bind:likechange="onLikeChange"
+    ></like-button>
+    
     <view class="act">
       <text class="icon">🪙</text>
       <text class="txt">投币</text>

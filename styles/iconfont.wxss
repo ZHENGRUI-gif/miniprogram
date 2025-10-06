@@ -1,0 +1,69 @@
+/* iconfont样式 - 使用Unicode字符作为临时方案 */
+@font-face {
+  font-family: 'iconfont';
+  src: url('data:font/woff2;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('woff2'),
+       url('data:font/woff;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('woff'),
+       url('data:font/truetype;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 点赞图标 - 使用Unicode字符 */
+.icon-dianzan:before {
+  content: "👍";
+}
+
+.icon-dianzan1:before {
+  content: "👍";
+}
+
+/* 点踩图标 - 使用Unicode字符 */
+.icon-cai:before {
+  content: "👎";
+}
+
+.icon-cai1:before {
+  content: "👎";
+}
+
+/* 其他常用图标 */
+.icon-shoucang:before {
+  content: "⭐";
+}
+
+.icon-fenxiang:before {
+  content: "📤";
+}
+
+.icon-toubi:before {
+  content: "🪙";
+}
+
+.icon-guanzhu:before {
+  content: "➕";
+}
+
+.icon-xiaoxi:before {
+  content: "💬";
+}
+
+.icon-sousuo:before {
+  content: "🔍";
+}
+
+.icon-shezhi:before {
+  content: "⚙️";
+}
+
+.icon-tuichu:before {
+  content: "🚪";
+}

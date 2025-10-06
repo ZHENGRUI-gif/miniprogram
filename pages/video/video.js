@@ -226,6 +226,26 @@ Page({
     setTimeout(() => {
       this.setData({ playUrl: currentUrl });
     }, 100);
+  },
+
+  // 点赞状态变化回调
+  onLikeChange(e) {
+    const { isLiked, isDisliked, likeCount, dislikeCount } = e.detail;
+    
+    // 更新视频数据中的点赞状态
+    this.setData({
+      'video.isLiked': isLiked,
+      'video.isDisliked': isDisliked,
+      'video.stats.love': likeCount,
+      'video.stats.dislike': dislikeCount
+    });
+
+    console.log('点赞状态更新:', {
+      isLiked,
+      isDisliked,
+      likeCount,
+      dislikeCount
+    });
   }
 });
 
