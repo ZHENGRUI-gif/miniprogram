@@ -286,8 +286,8 @@ Page({
     this.setData({
       'video.isLiked': isLiked,
       'video.isDisliked': isDisliked,
-      'video.stats.love': likeCount,
-      'video.stats.dislike': dislikeCount
+      'video.stats.good': likeCount,
+      'video.stats.bad': dislikeCount
     });
 
     console.log('点赞状态更新:', {
