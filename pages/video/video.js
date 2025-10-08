@@ -20,6 +20,8 @@ Page({
     this.fetchVideo(vid);
     this.fetchDanmu(vid);
     this.connectWS(vid);
+    // 记录用户播放行为，创建UserVideo记录
+    this.recordUserPlay(vid);
   },
   async fetchVideo(vid) {
     try {
@@ -226,6 +228,54 @@ Page({
     setTimeout(() => {
       this.setData({ playUrl: currentUrl });
     }, 100);
+  },
+
+  // 记录用户播放行为，创建UserVideo记录
+  async recordUserPlay(vid) {
+    try {
+      const token = wx.getStorageSync('teri_token') || wx.getStorageSync('token');
+      if (!token) {
+        console.log('用户未登录，跳过播放记录');
+        return;
+      }
+
+      console.log('记录用户播放行为, vid:', vid);
+      
+      const res = await request({
+        url: `/video/play/user?vid=${vid}`,
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log('播放记录接口响应:', res);
+      
+      if (res && res.data && res.data.data) {
+        const userVideoData = res.data.data;
+        console.log('用户视频互动数据:', userVideoData);
+        
+        // 更新点赞状态到页面数据
+        this.setData({
+          'video.isLiked': userVideoData.love === 1,
+          'video.isDisliked': userVideoData.unlove === 1,
+          'video.isCoined': userVideoData.coin === 1,
+          'video.isCollected': userVideoData.collect === 1
+        });
+        
+        console.log('用户互动状态已更新:', {
+          isLiked: userVideoData.love === 1,
+          isDisliked: userVideoData.unlove === 1,
+          isCoined: userVideoData.coin === 1,
+          isCollected: userVideoData.collect === 1
+        });
+      } else {
+        console.log('播放记录接口响应格式异常:', res);
+      }
+    } catch (error) {
+      console.error('记录用户播放行为失败:', error);
+      // 不显示错误提示，避免影响用户体验
+    }
   },
 
   // 点赞状态变化回调
