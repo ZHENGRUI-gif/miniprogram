@@ -22,7 +22,7 @@
   <!-- 点踩按钮 -->
   <view class="dislike-button {{isDisliked ? 'disliked' : ''}}" bindtap="onDislikeTap">
     <view class="icon-wrapper">
-      <text class="iconfont {{isDisliked ? 'icon-cai1' : 'icon-cai'}}"></text>
+      <text class="iconfont {{isDisliked ? 'icon-diancai1' : 'icon-diancai'}}"></text>
     </view>
     <text class="dislike-count">{{dislikeCount}}</text>
   </view>

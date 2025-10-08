@@ -1,12 +1,9 @@
-/* iconfont样式 - 使用Unicode字符作为临时方案 */
+/* iconfont样式 - 使用真正的字体图标 */
 @font-face {
-  font-family: 'iconfont';
-  src: url('data:font/woff2;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('woff2'),
-       url('data:font/woff;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('woff'),
-       url('data:font/truetype;base64,d09GMgABAAAAAAJkAAoAAAAABlQAAAIWAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmAAhSoCZw==') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+  font-family: "iconfont"; /* Project id 4179759 */
+  src: url('//at.alicdn.com/t/c/font_4179759_9hwhc7qk0zc.woff2?t=1710956870199') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4179759_9hwhc7qk0zc.woff?t=1710956870199') format('woff'),
+       url('//at.alicdn.com/t/c/font_4179759_9hwhc7qk0zc.ttf?t=1710956870199') format('truetype');
 }
 
 .iconfont {
@@ -17,53 +14,73 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 点赞图标 - 使用Unicode字符 */
+/* 点赞图标 - 使用真正的字体图标 */
 .icon-dianzan:before {
-  content: "👍";
+  content: "\e603";
 }
 
 .icon-dianzan1:before {
-  content: "👍";
+  content: "\e61d";
 }
 
-/* 点踩图标 - 使用Unicode字符 */
-.icon-cai:before {
-  content: "👎";
+/* 点踩图标 - 使用真正的字体图标 */
+.icon-diancai:before {
+  content: "\e606";
 }
 
-.icon-cai1:before {
-  content: "👎";
+.icon-diancai1:before {
+  content: "\e67c";
 }
 
-/* 其他常用图标 */
+/* 其他常用图标 - 使用真正的字体图标 */
 .icon-shoucang:before {
-  content: "⭐";
+  content: "\e634";
+}
+
+.icon-shoucang1:before {
+  content: "\e634";
 }
 
 .icon-fenxiang:before {
-  content: "📤";
+  content: "\e716";
+}
+
+.icon-zhuanfa:before {
+  content: "\e716";
 }
 
 .icon-toubi:before {
-  content: "🪙";
+  content: "\e605";
 }
 
 .icon-guanzhu:before {
-  content: "➕";
+  content: "\e60a";
+}
+
+.icon-jia:before {
+  content: "\e60a";
 }
 
 .icon-xiaoxi:before {
-  content: "💬";
+  content: "\e608";
+}
+
+.icon-xinfeng1:before {
+  content: "\e608";
 }
 
 .icon-sousuo:before {
-  content: "🔍";
+  content: "\e614";
 }
 
 .icon-shezhi:before {
-  content: "⚙️";
+  content: "\e61e";
 }
 
 .icon-tuichu:before {
-  content: "🚪";
+  content: "\e65d";
+}
+
+.icon-dengchu:before {
+  content: "\e65d";
 }
