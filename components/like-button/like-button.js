@@ -274,10 +274,21 @@ Component({
      * 显示GIF动画
      */
     gifShow() {
+      console.log('开始显示GIF动画');
+      
+      // 先隐藏，然后显示，强制重新加载GIF
       this.setData({
-        gifDisplay: true,
-        isGifShow: true
+        gifDisplay: false,
+        isGifShow: false
       });
+      
+      // 短暂延迟后重新显示，确保GIF重新播放
+      setTimeout(() => {
+        this.setData({
+          gifDisplay: true,
+          isGifShow: true
+        });
+      }, 50);
       
       // 3秒后隐藏GIF
       setTimeout(() => {

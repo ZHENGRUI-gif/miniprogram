@@ -2,7 +2,13 @@
 <view class="like-container">
   <!-- 点赞GIF动画 -->
   <view class="dianzan-gif {{isGifShow ? 'gif-show' : 'gif-hide'}}" wx:if="{{gifDisplay}}">
-    <image src="/assets/images/dianzan.gif" class="gif-image" mode="aspectFit"></image>
+    <image 
+      src="/assets/images/dianzan.gif" 
+      class="gif-image" 
+      mode="aspectFit"
+      lazy-load="{{false}}"
+      show-menu-by-longpress="{{false}}"
+    ></image>
   </view>
   
   <!-- 点赞按钮 -->
