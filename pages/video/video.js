@@ -14,13 +14,21 @@ Page({
     inputDm: '',
     videoLoadError: false
   },
-  onLoad(query) {
+  
+  // 私有变量
+  _lastTime: 0,
+  async onLoad(query) {
     const vid = Number(query.vid || 0);
     this.setData({ vid });
-    this.fetchVideo(vid);
+    
+    // 先获取视频数据
+    await this.fetchVideo(vid);
+    
+    // 然后获取其他数据
     this.fetchDanmu(vid);
     this.connectWS(vid);
-    // 记录用户播放行为，创建UserVideo记录
+    
+    // 最后记录用户播放行为，创建UserVideo记录
     this.recordUserPlay(vid);
   },
   async fetchVideo(vid) {
@@ -250,25 +258,59 @@ Page({
       });
 
       console.log('播放记录接口响应:', res);
+      console.log('响应数据结构检查:', {
+        hasRes: !!res,
+        hasData: !!(res && res.data),
+        hasDataData: !!(res && res.data && res.data.data),
+        resData: res?.data,
+        resDataData: res?.data?.data
+      });
       
-      if (res && res.data && res.data.data) {
-        const userVideoData = res.data.data;
+      // 检查响应格式，兼容不同的数据结构
+      let userVideoData = null;
+      if (res && res.data) {
+        // 尝试不同的数据路径
+        userVideoData = res.data.data || res.data;
         console.log('用户视频互动数据:', userVideoData);
         
-        // 更新点赞状态到页面数据
-        this.setData({
-          'video.isLiked': userVideoData.love === 1,
-          'video.isDisliked': userVideoData.unlove === 1,
-          'video.isCoined': userVideoData.coin === 1,
-          'video.isCollected': userVideoData.collect === 1
-        });
-        
-        console.log('用户互动状态已更新:', {
-          isLiked: userVideoData.love === 1,
-          isDisliked: userVideoData.unlove === 1,
-          isCoined: userVideoData.coin === 1,
-          isCollected: userVideoData.collect === 1
-        });
+        // 检查数据是否包含用户互动信息
+        if (userVideoData && (userVideoData.love !== undefined || userVideoData.unlove !== undefined)) {
+          // 更新点赞状态到页面数据
+          this.setData({
+            'video.isLiked': userVideoData.love === 1,
+            'video.isDisliked': userVideoData.unlove === 1,
+            'video.isCoined': userVideoData.coin === 1,
+            'video.isCollected': userVideoData.collect === 1
+          });
+          
+          // 同步更新like-button组件的状态
+          const likeButton = this.selectComponent('like-button');
+          if (likeButton) {
+            const updateData = {
+              isLiked: userVideoData.love === 1,
+              isDisliked: userVideoData.unlove === 1,
+              likeCount: this.data.video.stats.good || 0,
+              dislikeCount: this.data.video.stats.bad || 0
+            };
+            
+            console.log('准备更新like-button组件状态:', updateData);
+            console.log('userVideoData原始数据:', userVideoData);
+            console.log('video.stats数据:', this.data.video.stats);
+            
+            likeButton.updateLikeStatus(updateData);
+          } else {
+            console.log('未找到like-button组件');
+          }
+          
+          console.log('用户互动状态已更新:', {
+            isLiked: userVideoData.love === 1,
+            isDisliked: userVideoData.unlove === 1,
+            isCoined: userVideoData.coin === 1,
+            isCollected: userVideoData.collect === 1
+          });
+        } else {
+          console.log('用户互动数据格式不正确:', userVideoData);
+        }
       } else {
         console.log('播放记录接口响应格式异常:', res);
       }
@@ -276,6 +318,19 @@ Page({
       console.error('记录用户播放行为失败:', error);
       // 不显示错误提示，避免影响用户体验
     }
+  },
+
+  // 视频播放时间更新
+  onTimeUpdate(e) {
+    const currentTime = e.detail.currentTime;
+    
+    // 如果播放时间回到0，说明视频重新开始播放，需要记录播放行为
+    if (currentTime === 0 && this._lastTime > 0) {
+      console.log('视频重新开始播放，记录播放行为');
+      this.recordUserPlay(this.data.vid);
+    }
+    
+    this._lastTime = currentTime;
   },
 
   // 点赞状态变化回调

@@ -1,7 +1,7 @@
 const config = {
-  baseURL: "http://192.168.1.7:7070", // 替换为你的后端域名/端口，需在小程序后台配置request合法域名
-  wsURL: "ws://192.168.1.7:7070", // 弹幕WebSocket地址，与后端服务同端口
-  imWSURL: "ws://192.168.1.7:7071/im", // IM WebSocket地址，Netty服务端口，需要/im路径
+  baseURL: "http://localhost:7070", // 替换为你的后端域名/端口，需在小程序后台配置request合法域名
+  wsURL: "ws://localhost:7070", // 弹幕WebSocket地址，与后端服务同端口
+  imWSURL: "ws://localhost:7071/im", // IM WebSocket地址，Netty服务端口，需要/im路径
   // 用户信息接口（按优先级依次尝试，避免404）
   userInfoEndpoints: [
     "/user/personal/info",

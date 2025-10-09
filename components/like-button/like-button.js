@@ -349,11 +349,26 @@ Component({
      * 更新点赞状态（供外部调用）
      */
     updateLikeStatus(data) {
+      console.log('like-button组件收到状态更新:', data);
+      console.log('更新前组件状态:', {
+        isLiked: this.data.isLiked,
+        isDisliked: this.data.isDisliked,
+        likeCount: this.data.likeCount,
+        dislikeCount: this.data.dislikeCount
+      });
+      
       this.setData({
         isLiked: data.isLiked || false,
         isDisliked: data.isDisliked || false,
         likeCount: data.likeCount || 0,
         dislikeCount: data.dislikeCount || 0
+      });
+      
+      console.log('更新后组件状态:', {
+        isLiked: this.data.isLiked,
+        isDisliked: this.data.isDisliked,
+        likeCount: this.data.likeCount,
+        dislikeCount: this.data.dislikeCount
       });
     }
   },
@@ -364,6 +379,13 @@ Component({
   lifetimes: {
     attached() {
       console.log('点赞组件已加载');
+      // 初始化时同步properties到data
+      this.setData({
+        isLiked: this.properties.isLiked || false,
+        isDisliked: this.properties.isDisliked || false,
+        likeCount: this.properties.likeCount || 0,
+        dislikeCount: this.properties.dislikeCount || 0
+      });
     },
     
     detached() {
