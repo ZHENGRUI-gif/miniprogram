@@ -24,6 +24,8 @@ Page({
     lastScrollTime: 0, // 上次滚动时间
     scrollThrottleTimer: null, // 滚动节流定时器
     msgUnread: 0, // 未读消息数量
+    shownVideoIds: new Set(), // 已显示过的视频ID集合
+    allVideosShown: false, // 是否所有视频都已显示过
   },
   onShow() {
     this.fetchFeed();
@@ -82,6 +84,9 @@ Page({
       displayVideos: list,
       banners: config.banners 
     });
+    
+    // 初始化时记录已显示的视频ID
+    this.initializeShownVideos(list);
     
     // 数据加载完成后，延迟检查视频可见性
     setTimeout(() => {
@@ -518,23 +523,104 @@ token: ${statusInfo.normalToken}
     }, 1000);
   },
   
-  // 获取更多视频（循环逻辑）
+  // 初始化已显示的视频ID
+  initializeShownVideos(videoList) {
+    const shownVideoIds = new Set();
+    videoList.forEach(video => {
+      if (video.video && video.video.vid) {
+        shownVideoIds.add(String(video.video.vid));
+      }
+    });
+    
+    this.setData({
+      shownVideoIds,
+      allVideosShown: shownVideoIds.size >= videoList.length
+    });
+    
+    console.log('初始化已显示视频:', {
+      totalVideos: videoList.length,
+      shownCount: shownVideoIds.size,
+      allShown: shownVideoIds.size >= videoList.length
+    });
+  },
+
+  // 获取更多视频（优化循环逻辑）
   getMoreVideos(count) {
     const videos = this.data.videos;
-    const currentIndex = this.data.currentIndex;
+    const shownVideoIds = this.data.shownVideoIds;
+    const allVideosShown = this.data.allVideosShown;
     const newVideos = [];
+    const newShownIds = new Set(shownVideoIds);
     
-    for (let i = 0; i < count; i++) {
-      const videoIndex = (currentIndex + i) % videos.length;
-      newVideos.push(videos[videoIndex]);
+    console.log('获取更多视频:', {
+      requestCount: count,
+      totalVideos: videos.length,
+      alreadyShown: shownVideoIds.size,
+      allVideosShown
+    });
+    
+    if (!allVideosShown) {
+      // 优先显示未出现过的视频
+      const unshownVideos = videos.filter(video => 
+        video.video && video.video.vid && !shownVideoIds.has(String(video.video.vid))
+      );
+      
+      console.log('未显示的视频数量:', unshownVideos.length);
+      
+      // 随机打乱未显示的视频顺序
+      const shuffledUnshown = this.shuffleArray([...unshownVideos]);
+      
+      // 取需要的数量
+      const selectedUnshown = shuffledUnshown.slice(0, count);
+      newVideos.push(...selectedUnshown);
+      
+      // 记录新显示的视频ID
+      selectedUnshown.forEach(video => {
+        if (video.video && video.video.vid) {
+          newShownIds.add(String(video.video.vid));
+        }
+      });
+      
+      // 如果还需要更多视频，从已显示的视频中随机选择
+      if (newVideos.length < count) {
+        const remainingCount = count - newVideos.length;
+        const shownVideos = videos.filter(video => 
+          video.video && video.video.vid && shownVideoIds.has(String(video.video.vid))
+        );
+        const shuffledShown = this.shuffleArray([...shownVideos]);
+        const selectedShown = shuffledShown.slice(0, remainingCount);
+        newVideos.push(...selectedShown);
+      }
+    } else {
+      // 所有视频都已显示过，随机循环显示
+      const shuffledVideos = this.shuffleArray([...videos]);
+      const selectedVideos = shuffledVideos.slice(0, count);
+      newVideos.push(...selectedVideos);
     }
     
-    // 更新循环索引
+    // 更新已显示的视频ID集合
     this.setData({
-      currentIndex: (currentIndex + count) % videos.length
+      shownVideoIds: newShownIds,
+      allVideosShown: newShownIds.size >= videos.length
+    });
+    
+    console.log('返回新视频:', {
+      newVideoCount: newVideos.length,
+      totalShown: newShownIds.size,
+      allVideosShown: newShownIds.size >= videos.length
     });
     
     return newVideos;
+  },
+
+  // 数组随机打乱函数
+  shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   },
   
   // 下拉刷新
@@ -547,7 +633,9 @@ token: ${statusInfo.normalToken}
       this.fetchFeed().then(() => {
         this.setData({ 
           refreshing: false,
-          currentIndex: 0 // 重置循环索引
+          currentIndex: 0, // 重置循环索引
+          shownVideoIds: new Set(), // 重置已显示视频ID集合
+          allVideosShown: false // 重置所有视频已显示状态
         });
       });
     }, 1500);
