@@ -1,7 +1,204 @@
-.container { padding: 24rpx; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 20rpx; }
-.item { background: #fff; border-radius: 16rpx; overflow: hidden; box-shadow: 0 6rpx 24rpx rgba(0,0,0,0.06); }
-.cover { width: 100%; height: 320rpx; background: #eee; }
-.title { padding: 12rpx 16rpx; font-size: 26rpx; color: #222; min-height: 72rpx; }
-.meta { padding: 0 16rpx 16rpx; color: #999; font-size: 22rpx; }
-.empty { text-align: center; color: #888; margin-top: 120rpx; }
+.container {
+  background: #f5f6f7;
+  min-height: 100vh;
+}
+
+/* 导航栏 */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+  padding: 0 20rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 40rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.nav-placeholder {
+  width: 60rpx;
+}
+
+/* 用户列表 */
+.user-list {
+  padding: 20rpx;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+
+.user-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 24rpx;
+  background: #f0f0f0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50rpx;
+  color: #ccc;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.user-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.auth-badge {
+  background: #00aeec;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.vip-badge {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.user-desc {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.user-stats {
+  display: flex;
+  gap: 20rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.stat-item {
+  color: #666;
+}
+
+/* 关注按钮 */
+.follow-btn {
+  background: #fb7299;
+  color: #fff;
+  padding: 16rpx 32rpx;
+  border-radius: 8rpx;
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 120rpx;
+}
+
+.follow-btn.followed {
+  background: #e5e9ef;
+  color: #666;
+}
+
+.follow-text {
+  color: inherit;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 40rpx 20rpx;
+  color: #666;
+}
+
+.load-text {
+  font-size: 26rpx;
+  color: #fb7299;
+}
+
+/* 没有更多数据 */
+.no-more {
+  text-align: center;
+  padding: 40rpx 20rpx;
+  color: #999;
+}
+
+.no-more-text {
+  font-size: 24rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 120rpx 20rpx;
+  color: #999;
+}
+
+.empty-text {
+  font-size: 28rpx;
+}
+
+/* 加载状态 */
+.loading-state {
+  text-align: center;
+  padding: 120rpx 20rpx;
+  color: #999;
+}
+
+.loading-text {
+  font-size: 28rpx;
+}

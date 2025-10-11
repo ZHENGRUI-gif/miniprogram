@@ -40,8 +40,8 @@
     </view>
 
     <!-- 关注按钮 -->
-    <view class="follow-btn">
-      <text class="follow-text">+ 关注</text>
+    <view wx:if="{{!isOwn}}" class="follow-btn {{isFollowing ? 'followed' : ''}}" bindtap="toggleFollow">
+      <text class="follow-text">{{isFollowing ? '已关注' : '+ 关注'}}</text>
     </view>
   </view>
 
@@ -55,13 +55,20 @@
   <!-- 视频列表区域 -->
   <view wx:if="{{activeTab === 'videos'}}" class="videos-section">
     <view class="section-header">
-      <view class="play-all-btn">
-        <text class="play-icon">▶</text>
-        <text class="play-text">播放全部</text>
+      <view class="video-title">
+        <text class="title-text">{{isOwn ? '我的' : 'TA的'}}投稿</text>
+        <text class="title-count">{{videoCount}}</text>
       </view>
-      <view class="sort-option">
-        <text class="sort-text">最新发布</text>
-        <text class="sort-icon">☰</text>
+      <view class="sort-tabs">
+        <view class="sort-tab {{sortRule === 1 ? 'active' : ''}}" bindtap="changeSortRule" data-rule="1">
+          <text>最新发布</text>
+        </view>
+        <view class="sort-tab {{sortRule === 2 ? 'active' : ''}}" bindtap="changeSortRule" data-rule="2">
+          <text>最多播放</text>
+        </view>
+        <view class="sort-tab {{sortRule === 3 ? 'active' : ''}}" bindtap="changeSortRule" data-rule="3">
+          <text>最多点赞</text>
+        </view>
       </view>
     </view>
 
@@ -95,13 +102,134 @@
     <view wx:else class="empty-state">
       <text class="empty-text">暂无视频</text>
     </view>
+    
+    <!-- 加载更多 -->
+    <view wx:if="{{videos.length > 0 && hasMore}}" class="load-more" bindtap="loadMoreVideos">
+      <text class="load-text">{{loadingMore ? '加载中...' : '加载更多'}}</text>
+    </view>
+    
+    <!-- 没有更多数据 -->
+    <view wx:if="{{videos.length > 0 && !hasMore}}" class="no-more">
+      <text class="no-more-text">没有更多视频了</text>
+    </view>
   </view>
 
-  <!-- 其他标签内容 -->
+  <!-- 主页内容 -->
   <view wx:elif="{{activeTab === 'home'}}" class="home-content">
-    <text class="empty-text">主页内容开发中</text>
+    <!-- 用户视频区域 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">{{isOwn ? '我的' : 'TA的'}}视频</text>
+        <text class="section-count">{{videoCount}}</text>
+        <view class="section-more" bindtap="goToVideos">
+          <text class="more-text">更多</text>
+          <text class="more-icon">></text>
+        </view>
+      </view>
+      
+      <view wx:if="{{homeVideos.length > 0}}" class="video-grid">
+        <block wx:for="{{homeVideos}}" wx:key="vid">
+          <view class="video-card" bindtap="goDetail" data-vid="{{item.video.vid}}">
+            <view class="video-cover">
+              <image class="cover-img" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+              <view class="duration">{{formatDuration(item.video.duration)}}</view>
+            </view>
+            <view class="video-title">{{item.video.title}}</view>
+            <view class="video-stats">
+              <text class="play-count">{{formatNum(item.stats.play || item.video.play_count || 0)}}播放</text>
+              <text class="upload-time">{{formatUploadTime(item.video.uploadDate)}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view wx:else class="empty-videos">
+        <text class="empty-text">暂无视频</text>
+      </view>
+    </view>
+
+    <!-- 收藏夹区域 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">{{isOwn ? '我的' : 'TA的'}}收藏夹</text>
+        <text class="section-count">{{favList.length}}</text>
+        <view class="section-more" bindtap="goToFavorites">
+          <text class="more-text">更多</text>
+          <text class="more-icon">></text>
+        </view>
+      </view>
+      
+      <view wx:if="{{favList.length > 0}}" class="fav-grid">
+        <block wx:for="{{favList}}" wx:key="fid">
+          <view class="fav-card" bindtap="goToFavDetail" data-fid="{{item.fid}}">
+            <view class="fav-cover">
+              <image wx:if="{{item.cover}}" class="cover-img" src="{{item.cover}}" mode="aspectFill" />
+              <view wx:else class="cover-placeholder">📁</view>
+              <view class="fav-count">{{item.count}}</view>
+            </view>
+            <view class="fav-title">{{item.title}}</view>
+            <view class="fav-meta">
+              <text class="fav-visibility">{{item.visible === 1 ? '公开' : '私密'}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view wx:else class="empty-favs">
+        <text class="empty-text">暂无收藏夹</text>
+      </view>
+    </view>
+
+    <!-- 最近点赞区域 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">最近点赞的视频</text>
+      </view>
+      
+      <view wx:if="{{loveVideos.length > 0}}" class="love-list">
+        <block wx:for="{{loveVideos}}" wx:key="vid">
+          <view class="love-item" bindtap="goDetail" data-vid="{{item.video.vid}}">
+            <view class="love-cover">
+              <image class="cover-img" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+              <view class="duration">{{formatDuration(item.video.duration)}}</view>
+            </view>
+            <view class="love-info">
+              <view class="love-title">{{item.video.title}}</view>
+              <view class="love-meta">
+                <text class="author">{{item.user.nickname}}</text>
+                <text class="play-count">{{formatNum(item.stats.play || 0)}}播放</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+      <view wx:else class="empty-love">
+        <text class="empty-text">暂无点赞记录</text>
+      </view>
+    </view>
   </view>
+
+  <!-- 收藏内容 -->
   <view wx:else class="favorites-content">
-    <text class="empty-text">收藏内容开发中</text>
+    <view wx:if="{{favList.length > 0}}" class="fav-list">
+      <block wx:for="{{favList}}" wx:key="fid">
+        <view class="fav-item" bindtap="goToFavDetail" data-fid="{{item.fid}}">
+          <view class="fav-cover">
+            <image wx:if="{{item.cover}}" class="cover-img" src="{{item.cover}}" mode="aspectFill" />
+            <view wx:else class="cover-placeholder">📁</view>
+            <view class="fav-count">{{item.count}}</view>
+          </view>
+          <view class="fav-info">
+            <view class="fav-title">{{item.title}}</view>
+            <view class="fav-desc">{{item.description || '暂无描述'}}</view>
+            <view class="fav-meta">
+              <text class="fav-visibility">{{item.visible === 1 ? '公开' : '私密'}}</text>
+              <text class="fav-time">{{formatUploadTime(item.create_time)}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view wx:else class="empty-favs">
+      <text class="empty-text">暂无收藏夹</text>
+    </view>
   </view>
 </view>
