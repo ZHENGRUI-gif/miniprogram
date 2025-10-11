@@ -1,13 +1,13 @@
 .container { 
   background: #f5f6f7; 
   min-height: 100vh; 
-  padding-top: 140rpx; /* 继续下移内容 */
+  padding-top: 0; /* 去除上方空白区域 */
 }
 
 /* 固定聊天按钮 */
 .chat-btn {
   position: fixed;
-  top: 120rpx; /* 调整到系统导航栏下方 */
+  top: 20rpx; /* 调整到页面顶部 */
   right: 30rpx;
   width: 80rpx;
   height: 80rpx;
@@ -25,7 +25,7 @@
 /* 用户信息区域 */
 .profile-section {
   background: #fff;
-  padding: 30rpx 20rpx;
+  padding: 20rpx 20rpx 30rpx 20rpx; /* 减少上边距 */
   margin-bottom: 20rpx;
 }
 

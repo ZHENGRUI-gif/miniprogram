@@ -85,6 +85,30 @@ Page({
   },
   goLogin() { wx.navigateTo({ url: '/pages/login/login' }); },
   
+  // 跳转到用户空间页面
+  goToUserSpace() {
+    if (!this.data.hasLogin) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const uid = this.data.user.uid || this.data.user.id || this.data.user.user_id;
+    if (!uid) {
+      wx.showToast({
+        title: '用户信息获取失败',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    wx.navigateTo({
+      url: `/pages/user-space/user-space?uid=${uid}`
+    });
+  },
+  
   // 加载其他账号列表
   loadOtherAccounts() {
     try {

@@ -1,12 +1,14 @@
 <view class="container">
   <view class="card header">
-    <image wx:if="{{userAvatar}}" class="avatar" src="{{userAvatar}}" mode="aspectFill" />
-    <view wx:else class="avatar placeholder">
-      <text class="placeholder-icon">👤</text>
-    </view>
-    <view class="info">
-      <view class="name">{{user.nickname || '未登录'}}</view>
-      <view class="desc text-ellipsis">{{user.description || '登录后享受更多功能'}}</view>
+    <view class="user-info-area" bindtap="goToUserSpace">
+      <image wx:if="{{userAvatar}}" class="avatar" src="{{userAvatar}}" mode="aspectFill" />
+      <view wx:else class="avatar placeholder">
+        <text class="placeholder-icon">👤</text>
+      </view>
+      <view class="info">
+        <view class="name">{{user.nickname || '未登录'}}</view>
+        <view class="desc text-ellipsis">{{user.description || '登录后享受更多功能'}}</view>
+      </view>
     </view>
     <!-- 切换账号按钮 -->
     <view wx:if="{{hasLogin}}" class="switch-account-btn" bindtap="showSwitchAccount">
