@@ -26,18 +26,19 @@
     <!-- 统计数据 -->
     <view class="stats-row">
       <view class="stat-item" bindtap="goFans">
-        <text class="stat-number">{{formatNum(user.fansCount || 0)}}</text>
+        <text class="stat-number">{{user.fansCount}}</text>
         <text class="stat-label">粉丝</text>
       </view>
       <view class="stat-item" bindtap="goFollows">
-        <text class="stat-number">{{formatNum(user.followsCount || 0)}}</text>
+        <text class="stat-number">{{user.followsCount}}</text>
         <text class="stat-label">关注</text>
       </view>
       <view class="stat-item">
-        <text class="stat-number">{{formatNum(user.loveCount || 0)}}</text>
+        <text class="stat-number">{{user.loveCount}}</text>
         <text class="stat-label">获赞</text>
       </view>
     </view>
+    
 
     <!-- 关注按钮 -->
     <view wx:if="{{!isOwn}}" class="follow-btn {{isFollowing ? 'followed' : ''}}" bindtap="toggleFollow">

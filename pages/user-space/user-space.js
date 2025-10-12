@@ -43,30 +43,77 @@ Page({
     try {
       // 获取用户基本信息
       const userRes = await request({ url: '/user/info/get-one', data: { uid } });
-      const userData = userRes && (userRes.data || userRes.user) || {};
+      console.log('用户信息API响应:', userRes);
       
-      // 获取用户统计数据
-      const statsRes = await request({ url: '/video/user-works-count', data: { uid } });
-      const stats = statsRes && statsRes.data || {};
+      // 检查响应结构并提取用户数据
+      let userData = {};
+      if (userRes && userRes.code === 200 && userRes.data) {
+        // 标准CustomResponse结构
+        userData = userRes.data;
+        console.log('使用标准结构，用户数据:', userData);
+      } else if (userRes && userRes.data) {
+        // 直接返回数据
+        userData = userRes.data;
+        console.log('使用直接数据，用户数据:', userData);
+      } else if (userRes) {
+        // 直接是用户数据
+        userData = userRes;
+        console.log('直接使用响应，用户数据:', userData);
+      }
       
-      // 合并用户信息
+      console.log('用户数据字段:', Object.keys(userData));
+      console.log('统计数据字段:', {
+        followsCount: userData.followsCount,
+        fansCount: userData.fansCount,
+        loveCount: userData.loveCount,
+        playCount: userData.playCount,
+        videoCount: userData.videoCount
+      });
+      
+      // 直接使用API返回的完整用户信息
       const user = {
-        uid: uid,
-        nickname: userData.nickname || userData.name || userData.username || '用户',
-        avatar_url: userData.avatar_url || userData.avatar || userData.head_image || '',
-        auth: userData.auth || userData.verified || false,
-        vip: userData.vip || userData.vip_level || 0,
-        level: userData.level || userData.user_level || 1,
-        exp: userData.exp || userData.experience || 0,
+        uid: userData.uid || uid,
+        nickname: userData.nickname || '用户',
+        avatar_url: userData.avatar_url || '',
+        auth: userData.auth || 0,
+        vip: userData.vip || 0,
+        level: userData.level || 1,
+        exp: userData.exp || 0,
         expPercent: userData.expPercent || 0,
-        description: userData.description || userData.signature || userData.bio || '',
-        followsCount: userData.followsCount || userData.follow_count || 0,
-        fansCount: userData.fansCount || userData.fan_count || 0,
-        loveCount: userData.loveCount || userData.like_count || 0,
-        playCount: stats.playCount || stats.total_play || 0
+        description: userData.description || '这个人很神秘，什么都没有写',
+        signature: userData.description || '这个人很神秘，什么都没有写',
+        followsCount: userData.followsCount || 0,
+        fansCount: userData.fansCount || 0,
+        loveCount: userData.loveCount || 0,
+        playCount: userData.playCount || 0,
+        videoCount: userData.videoCount || 0
       };
       
+      console.log('最终用户对象:', user);
+      console.log('formatNum测试:', {
+        fansCount: this.formatNum(user.fansCount),
+        followsCount: this.formatNum(user.followsCount),
+        loveCount: this.formatNum(user.loveCount)
+      });
+      
       this.setData({ user });
+      
+      // 强制触发页面更新
+      this.setData({ 
+        'user.fansCount': user.fansCount,
+        'user.followsCount': user.followsCount,
+        'user.loveCount': user.loveCount
+      });
+      
+      // 检查数据是否正确设置
+      setTimeout(() => {
+        console.log('页面数据检查:', {
+          user: this.data.user,
+          fansCount: this.data.user?.fansCount,
+          followsCount: this.data.user?.followsCount,
+          loveCount: this.data.user?.loveCount
+        });
+      }, 100);
       
       // 如果不是自己的空间，检查关注状态
       if (!this.data.isOwn) {
@@ -74,7 +121,29 @@ Page({
       }
     } catch (e) {
       console.error('获取用户信息失败:', e);
+      console.error('错误详情:', e.message, e.stack);
       wx.showToast({ title: '获取用户信息失败', icon: 'none' });
+      
+      // 设置默认用户数据用于调试
+      this.setData({ 
+        user: {
+          uid: uid,
+          nickname: '测试用户',
+          avatar_url: '',
+          auth: 0,
+          vip: 0,
+          level: 1,
+          exp: 0,
+          expPercent: 0,
+          description: '测试描述',
+          signature: '测试签名',
+          followsCount: 999,
+          fansCount: 888,
+          loveCount: 777,
+          playCount: 666,
+          videoCount: 555
+        }
+      });
     } finally {
       this.setData({ loading: false });
     }
