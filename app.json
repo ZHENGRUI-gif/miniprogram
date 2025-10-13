@@ -11,7 +11,8 @@
     "pages/inbox/inbox",
     "pages/chat/chat",
     "pages/user-space/user-space",
-    "pages/likes/likes"
+    "pages/likes/likes",
+    "pages/video-detail/video-detail"
   ],
   "window": {
     "navigationBarTitleText": "blbl",

@@ -1,0 +1,70 @@
+<view class="container">
+  <!-- 收藏夹信息头部 -->
+  <view class="favorite-header">
+    <view class="favorite-info">
+      <view class="favorite-title">{{favoriteInfo.title || '收藏夹'}}</view>
+      <view class="favorite-desc">{{favoriteInfo.description || '暂无描述'}}</view>
+      <view class="favorite-meta">
+        <text class="video-count">{{videos.length}}个视频</text>
+        <text class="visibility">{{favoriteInfo.visible === 1 ? '公开' : '私密'}}</text>
+        <text class="create-time">{{formatUploadTime(favoriteInfo.create_time)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 视频列表 -->
+  <view class="video-list">
+    <view wx:if="{{videos.length > 0}}">
+      <block wx:for="{{videos}}" wx:key="vid">
+        <view class="video-item" bindtap="goToVideo" data-vid="{{item.video.vid}}">
+          <view class="video-thumbnail">
+            <image class="thumbnail" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+            <view class="duration">{{formatDuration(item.video.duration)}}</view>
+          </view>
+          <view class="video-info">
+            <view class="video-title">{{item.video.title}}</view>
+            <view class="video-meta">
+              <text class="author">{{item.user.nickname || '未知用户'}}</text>
+              <text class="upload-time">{{formatUploadTime(item.video.uploadDate)}}</text>
+            </view>
+            <view class="video-stats">
+              <view class="stat">
+                <text class="stat-icon">▶</text>
+                <text class="stat-text">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}}</text>
+              </view>
+              <view class="stat">
+                <text class="stat-icon">💬</text>
+                <text class="stat-text">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}}</text>
+              </view>
+              <view class="stat">
+                <text class="stat-icon">👍</text>
+                <text class="stat-text">{{formatNum(item.stats.good || item.video.like_count || item.video.likeCount || 0)}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 空状态 -->
+    <view wx:else class="empty-state">
+      <view class="empty-icon">📁</view>
+      <text class="empty-text">收藏夹暂无视频</text>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view wx:if="{{videos.length > 0 && hasMore}}" class="load-more" bindtap="loadMoreVideos">
+    <text class="load-text">{{loadingMore ? '加载中...' : '加载更多'}}</text>
+  </view>
+  
+  <!-- 没有更多数据 -->
+  <view wx:if="{{videos.length > 0 && !hasMore}}" class="no-more">
+    <text class="no-more-text">没有更多视频了</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

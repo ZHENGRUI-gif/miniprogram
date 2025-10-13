@@ -442,7 +442,9 @@ Page({
   // 跳转到收藏夹详情
   goToFavDetail(e) {
     const fid = e.currentTarget.dataset.fid;
-    wx.showToast({ title: '收藏夹详情功能开发中', icon: 'none' });
+    wx.navigateTo({ 
+      url: `/pages/video-detail/video-detail?fid=${fid}&uid=${this.data.uid}` 
+    });
   },
 
   // 下拉刷新

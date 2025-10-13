@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "收藏夹详情",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}
