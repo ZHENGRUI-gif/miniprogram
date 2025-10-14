@@ -12,7 +12,10 @@ Page({
     danmus: [],
     socketOpen: false,
     inputDm: '',
-    videoLoadError: false
+    videoLoadError: false,
+    // 收藏弹窗与状态
+    favDialogVisible: false,
+    collectedFids: []
   },
   
   // 私有变量
@@ -30,6 +33,8 @@ Page({
     
     // 最后记录用户播放行为，创建UserVideo记录
     this.recordUserPlay(vid);
+    // 获取该视频用户已收藏的收藏夹ID
+    this.fetchCollectedFids(vid);
   },
   async fetchVideo(vid) {
     try {
@@ -185,6 +190,38 @@ Page({
     };
     wx.sendSocketMessage({ data: JSON.stringify(payload) });
     this.setData({ inputDm: '' });
+  },
+  // 获取已收藏该视频的收藏夹ID
+  async fetchCollectedFids(vid) {
+    try {
+      const token = wx.getStorageSync('teri_token') || wx.getStorageSync('token');
+      if (!token) return;
+      const res = await request({ url: '/video/collected-fids', data: { vid }, headers: { Authorization: `Bearer ${token}` } });
+      if (res && res.data) {
+        this.setData({ collectedFids: res.data });
+      }
+    } catch (e) {
+      // 静默失败
+    }
+  },
+  // 打开收藏弹窗
+  openFavoriteDialog() {
+    const token = wx.getStorageSync('teri_token') || wx.getStorageSync('token');
+    if (!token) { wx.showToast({ title: '请先登录', icon: 'none' }); return; }
+    this.setData({ favDialogVisible: true });
+  },
+  // 关闭收藏弹窗
+  closeFavoriteDialog() { this.setData({ favDialogVisible: false }); },
+  // 收藏提交回调
+  onFavoriteSubmitted(e) {
+    const { fids, addCount, removeCount } = e.detail || {};
+    this.setData({ collectedFids: Array.from(fids || []), favDialogVisible: false });
+    // 同步更新视频收藏数（与Web端逻辑保持一致：增加addCount，减少removeCount不在此处理或按需处理）
+    try {
+      const current = Number(this.data.video?.stats?.collect || 0);
+      const next = current + Number(addCount || 0);
+      this.setData({ 'video.stats.collect': next });
+    } catch (_) {}
   },
   formatNum(n) {
     const num = Number(n) || 0;

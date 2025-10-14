@@ -1,0 +1,33 @@
+<view class="mask" wx:if="{{visible}}" catchtouchmove="noop">
+  <view class="dialog">
+    <view class="title">收藏到</view>
+
+    <scroll-view class="fav-list" scroll-y>
+      <block wx:for="{{favList}}" wx:key="fid">
+        <view class="fav-item" bindtap="toggleSelect" data-fid="{{item.fid}}">
+          <view class="left">
+            <view class="fav-title text-ellipsis">{{item.title}}</view>
+            <view class="fav-meta">共{{item.count || 0}}个视频 · {{item.visible === 1 ? '公开' : '私密'}}</view>
+          </view>
+          <view class="right">
+            <checkbox checked="{{selectedSet[item.fid]}}"/>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <view class="new-box">
+      <input class="input" placeholder="新建收藏夹名称" value="{{newTitle}}" bindinput="onInputTitle"/>
+      <picker mode="selector" range="{{visibilityOptions}}" value="{{visibleIdx}}" bindchange="onVisibleChange">
+        <view class="picker">{{visibilityOptions[visibleIdx]}}</view>
+      </picker>
+      <button class="btn" bindtap="createFavorite" loading="{{creating}}">新建</button>
+    </view>
+
+    <view class="actions">
+      <button class="btn cancel" bindtap="close">取消</button>
+      <button class="btn primary" bindtap="submit" loading="{{submitting}}">确定</button>
+    </view>
+  </view>
+</view>
+

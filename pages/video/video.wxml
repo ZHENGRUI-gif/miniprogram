@@ -65,7 +65,7 @@
       <text class="iconfont icon-toubi"></text>
       <text class="txt">投币</text>
     </view>
-    <view class="act">
+    <view class="act" bindtap="openFavoriteDialog">
       <text class="iconfont icon-shoucang1"></text>
       <text class="txt">收藏</text>
     </view>
@@ -74,6 +74,15 @@
       <text class="txt">分享</text>
     </view>
   </view>
+
+  <!-- 收藏夹选择弹窗 -->
+  <favorite-dialog 
+    vid="{{vid}}"
+    visible="{{favDialogVisible}}"
+    collected-fids="{{collectedFids}}"
+    bind:close="closeFavoriteDialog"
+    bind:submitted="onFavoriteSubmitted"
+  />
 
   <!-- 弹幕层（示意） -->
   <view class="danmu-box">
