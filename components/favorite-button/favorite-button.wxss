@@ -1,0 +1,223 @@
+/* 引入iconfont样式 */
+@import "../../styles/iconfont.wxss";
+
+/* 收藏按钮 */
+.favorite-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  color: #666;
+  position: relative;
+  min-width: 80rpx;
+}
+
+.favorite-icon {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.favorite-icon .iconfont {
+  font-size: 32rpx;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.favorite-icon.collected .iconfont {
+  color: #fb7299;
+  transform: scale(1.1);
+}
+
+.favorite-icon.loading .iconfont {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.favorite-text {
+  font-size: 22rpx;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.favorite-button.collected .favorite-text {
+  color: #fb7299;
+}
+
+.favorite-count {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  background: #fb7299;
+  color: #fff;
+  font-size: 18rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 12rpx;
+  min-width: 24rpx;
+  text-align: center;
+  line-height: 1;
+}
+
+/* 收藏夹选择弹窗 */
+.favorite-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.favorite-content {
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.favorite-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.favorite-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.favorite-close {
+  font-size: 40rpx;
+  color: #999;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20rpx 0;
+}
+
+.favorite-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f8f8f8;
+  transition: background-color 0.2s ease;
+}
+
+.favorite-item:last-child {
+  border-bottom: none;
+}
+
+.favorite-item:active {
+  background-color: #f8f8f8;
+}
+
+.favorite-item.selected {
+  background-color: #fff5f7;
+}
+
+.favorite-item.create-new {
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 10rpx;
+}
+
+.favorite-item.create-new .favorite-item-title {
+  color: #fb7299;
+  font-weight: 500;
+}
+
+.favorite-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.favorite-item-title {
+  font-size: 28rpx;
+  color: #222;
+  font-weight: 500;
+}
+
+.favorite-item-desc {
+  font-size: 24rpx;
+  color: #999;
+  line-height: 1.4;
+}
+
+.favorite-item-count {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.favorite-item-check {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-item-check .iconfont {
+  font-size: 24rpx;
+  color: #fb7299;
+}
+
+.favorite-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.favorite-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.favorite-btn.confirm {
+  background: #fb7299;
+  color: #fff;
+}
+
+.favorite-btn.confirm[disabled] {
+  background: #ccc;
+  color: #999;
+}

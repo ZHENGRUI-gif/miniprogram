@@ -2,7 +2,7 @@
   "navigationBarTitleText": "视频",
   "usingComponents": {
     "like-button": "/components/like-button/like-button",
-    "favorite-dialog": "/components/favorite-dialog/favorite-dialog"
+    "favorite-button": "/components/favorite-button/favorite-button"
   }
 }
 

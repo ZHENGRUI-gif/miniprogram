@@ -12,7 +12,10 @@ App({
     // 消息类型名称
     msgTypeNames: ['回复我的', '@ 我的', '收到的赞', '系统通知', '我的消息', '动态'],
     // WebSocket连接状态
-    wsConnected: false
+    wsConnected: false,
+    // 收藏状态管理
+    favoriteStatus: new Map(), // 存储视频收藏状态 {vid: {isCollected: boolean, collectCount: number}}
+    userFavorites: [] // 用户收藏夹列表
   },
   onLaunch() {
     try {
@@ -173,6 +176,8 @@ App({
     this.globalData.token = '';
     this.globalData.userInfo = null;
     this.globalData.msgUnread = [0, 0, 0, 0, 0, 0];
+    this.globalData.favoriteStatus.clear();
+    this.globalData.userFavorites = [];
     wx.removeStorageSync('teri_token');
     wx.removeStorageSync('userInfo');
     
@@ -180,5 +185,52 @@ App({
     WebSocketManager.token = "未设置";
     
     console.log('用户登出，清除token和WebSocket连接');
+  },
+
+  // 更新视频收藏状态
+  updateFavoriteStatus(vid, isCollected, collectCount) {
+    this.globalData.favoriteStatus.set(vid, {
+      isCollected,
+      collectCount
+    });
+    
+    // 通知所有页面更新收藏状态
+    this.triggerFavoriteUpdate(vid, isCollected, collectCount);
+  },
+
+  // 获取视频收藏状态
+  getFavoriteStatus(vid) {
+    return this.globalData.favoriteStatus.get(vid) || {
+      isCollected: false,
+      collectCount: 0
+    };
+  },
+
+  // 触发收藏状态更新 - 通知所有页面更新收藏状态
+  triggerFavoriteUpdate(vid, isCollected, collectCount) {
+    const pages = getCurrentPages();
+    pages.forEach(page => {
+      if (page.onFavoriteUpdate && typeof page.onFavoriteUpdate === 'function') {
+        page.onFavoriteUpdate(vid, isCollected, collectCount);
+      }
+    });
+  },
+
+  // 更新用户收藏夹列表
+  updateUserFavorites(favorites) {
+    this.globalData.userFavorites = favorites;
+    
+    // 通知所有页面更新收藏夹列表
+    this.triggerFavoritesUpdate(favorites);
+  },
+
+  // 触发收藏夹列表更新
+  triggerFavoritesUpdate(favorites) {
+    const pages = getCurrentPages();
+    pages.forEach(page => {
+      if (page.onFavoritesUpdate && typeof page.onFavoritesUpdate === 'function') {
+        page.onFavoritesUpdate(favorites);
+      }
+    });
   }
 });

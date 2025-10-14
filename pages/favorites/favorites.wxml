@@ -1,0 +1,144 @@
+<view class="container">
+  <!-- 标签页 -->
+  <view class="tabs">
+    <view 
+      class="tab {{selectedTab === 0 ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-tab="0"
+    >
+      我的收藏夹
+    </view>
+    <view 
+      class="tab {{selectedTab === 1 ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-tab="1"
+    >
+      收藏的视频
+    </view>
+  </view>
+
+  <!-- 我的收藏夹 -->
+  <view wx:if="{{selectedTab === 0}}" class="favorites-tab">
+    <!-- 创建收藏夹按钮 -->
+    <view class="create-favorite" bindtap="createFavorite">
+      <text class="iconfont icon-add"></text>
+      <text class="create-text">创建收藏夹</text>
+    </view>
+
+    <!-- 收藏夹列表 -->
+    <view class="favorites-list">
+      <block wx:for="{{favorites}}" wx:key="fid">
+        <view 
+          class="favorite-item {{currentFavorite && currentFavorite.fid === item.fid ? 'selected' : ''}}"
+          bindtap="onFavoriteSelect"
+          data-fid="{{item.fid}}"
+        >
+          <view class="favorite-cover">
+            <image 
+              wx:if="{{item.cover}}" 
+              class="cover-image" 
+              src="{{item.cover}}" 
+              mode="aspectFill" 
+            />
+            <view wx:else class="cover-placeholder">
+              <text class="iconfont icon-folder"></text>
+            </view>
+            <view class="video-count-badge">{{item.count}}</view>
+          </view>
+          <view class="favorite-info">
+            <view class="favorite-title">{{item.title}}</view>
+            <view class="favorite-desc">{{item.description || '暂无描述'}}</view>
+            <view class="favorite-meta">
+              <text class="visibility">{{item.visible === 1 ? '公开' : '私密'}}</text>
+            </view>
+          </view>
+          <view class="favorite-arrow">
+            <text class="iconfont icon-arrow-right"></text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{favorites.length === 0 && !loading}}" class="empty-state">
+      <view class="empty-icon">📁</view>
+      <text class="empty-text">还没有收藏夹</text>
+      <text class="empty-tip">点击上方按钮创建第一个收藏夹</text>
+    </view>
+  </view>
+
+  <!-- 收藏的视频 -->
+  <view wx:if="{{selectedTab === 1}}" class="videos-tab">
+    <!-- 收藏夹选择器 -->
+    <view wx:if="{{favorites.length > 0}}" class="favorite-selector">
+      <view class="selector-label">选择收藏夹：</view>
+      <view class="selector-list">
+        <block wx:for="{{favorites}}" wx:key="fid">
+          <view 
+            class="selector-item {{currentFavorite && currentFavorite.fid === item.fid ? 'selected' : ''}}"
+            bindtap="onFavoriteSelect"
+            data-fid="{{item.fid}}"
+          >
+            {{item.title}}
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- 视频列表 -->
+    <view class="video-list">
+      <view wx:if="{{collectedVideos.length > 0}}">
+        <block wx:for="{{collectedVideos}}" wx:key="vid">
+          <view class="video-item" bindtap="goToVideo" data-vid="{{item.video.vid}}">
+            <view class="video-thumbnail">
+              <image class="thumbnail" src="{{item.video.cover_url || item.video.coverUrl}}" mode="aspectFill" />
+              <view class="duration">{{formatDuration(item.video.duration)}}</view>
+            </view>
+            <view class="video-info">
+              <view class="video-title">{{item.video.title}}</view>
+              <view class="video-meta">
+                <text class="author">{{item.user.nickname || '未知用户'}}</text>
+                <text class="upload-time">{{formatUploadTime(item.video.uploadDate)}}</text>
+              </view>
+              <view class="video-stats">
+                <view class="stat">
+                  <text class="stat-icon">▶</text>
+                  <text class="stat-text">{{formatNum(item.stats.play || item.video.play_count || item.video.playCount || 0)}}</text>
+                </view>
+                <view class="stat">
+                  <text class="stat-icon">💬</text>
+                  <text class="stat-text">{{formatNum(item.stats.danmu || item.video.danmu_count || item.video.danmuCount || 0)}}</text>
+                </view>
+                <view class="stat">
+                  <text class="stat-icon">👍</text>
+                  <text class="stat-text">{{formatNum(item.stats.good || item.video.like_count || item.video.likeCount || 0)}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+      
+      <!-- 空状态 -->
+      <view wx:else class="empty-state">
+        <view class="empty-icon">📹</view>
+        <text class="empty-text">该收藏夹暂无视频</text>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{collectedVideos.length > 0 && hasMore}}" class="load-more" bindtap="loadMoreVideos">
+      <text class="load-text">{{loadingMore ? '加载中...' : '加载更多'}}</text>
+    </view>
+    
+    <!-- 没有更多数据 -->
+    <view wx:if="{{collectedVideos.length > 0 && !hasMore}}" class="no-more">
+      <text class="no-more-text">没有更多视频了</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

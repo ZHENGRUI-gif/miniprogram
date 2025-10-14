@@ -206,6 +206,57 @@ Page({
         }
       }
     });
+  },
+
+  // 跳转到收藏页面
+  goToFavorites() {
+    if (!this.data.hasLogin) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/favorites/favorites'
+    });
+  },
+
+  // 跳转到点赞页面
+  goToLikes() {
+    if (!this.data.hasLogin) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/likes/likes'
+    });
+  },
+
+  // 跳转到观看历史
+  goToHistory() {
+    if (!this.data.hasLogin) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+    wx.showToast({
+      title: '功能开发中',
+      icon: 'none'
+    });
+  },
+
+  // 跳转到设置页面
+  goToSettings() {
+    wx.showToast({
+      title: '功能开发中',
+      icon: 'none'
+    });
   }
 });
 

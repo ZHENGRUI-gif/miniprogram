@@ -11,13 +11,35 @@ function request({ url, method = 'GET', data = {}, headers = {} }) {
   
   if (token) finalHeaders['Authorization'] = `Bearer ${token}`;
   
-  console.log('发送请求:', { url: baseURL + url, method, data, headers: finalHeaders });
+  // 处理application/x-www-form-urlencoded格式的数据
+  let requestData = data;
+  if (method === 'POST' && finalHeaders['Content-Type'] === 'application/x-www-form-urlencoded') {
+    if (typeof data === 'object') {
+      // 手动构建查询字符串格式
+      const params = [];
+      Object.keys(data).forEach(key => {
+        if (Array.isArray(data[key])) {
+          // 对于数组，每个元素都作为单独的参数
+          data[key].forEach(item => {
+            params.push(`${key}=${encodeURIComponent(item)}`);
+          });
+        } else {
+          params.push(`${key}=${encodeURIComponent(data[key])}`);
+        }
+      });
+      requestData = params.join('&');
+    }
+  }
+  
+  console.log('发送请求:', { url: baseURL + url, method, data: requestData, headers: finalHeaders });
+  console.log('原始数据:', data);
+  console.log('转换后数据:', requestData);
   
   return new Promise((resolve, reject) => {
     wx.request({
       url: baseURL + url,
       method,
-      data,
+      data: requestData,
       header: finalHeaders,
       success: (res) => {
         console.log('请求响应:', { url, statusCode: res.statusCode, data: res.data });

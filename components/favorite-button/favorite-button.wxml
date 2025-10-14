@@ -1,0 +1,51 @@
+<!-- 收藏按钮 -->
+<view class="favorite-button" bindtap="onFavoriteTap">
+  <view class="favorite-icon {{isCollected ? 'collected' : ''}} {{loading ? 'loading' : ''}}">
+    <text class="iconfont icon-shoucang1"></text>
+  </view>
+  <text class="favorite-text">{{isCollected ? '已收藏' : '收藏'}}</text>
+  <text class="favorite-count" wx:if="{{collectCount > 0}}">{{collectCount}}</text>
+</view>
+
+<!-- 收藏夹选择弹窗 -->
+<view class="favorite-modal" wx:if="{{showFavoriteList}}" bindtap="cancelFavorite">
+  <view class="favorite-content" catchtap="">
+    <view class="favorite-header">
+      <text class="favorite-title">选择收藏夹</text>
+      <text class="favorite-close" catchtap="cancelFavorite">×</text>
+    </view>
+    
+    <view class="favorite-list">
+      <view 
+        class="favorite-item {{selectedFavorites.indexOf(item.fid) > -1 ? 'selected' : ''}}"
+        wx:for="{{favorites}}" 
+        wx:key="fid"
+        catchtap="onFavoriteSelect"
+        data-fid="{{item.fid}}"
+      >
+        <view class="favorite-item-info">
+          <text class="favorite-item-title">{{item.title}}</text>
+          <text class="favorite-item-desc">{{item.description || '暂无描述'}}</text>
+          <text class="favorite-item-count">{{item.count}}个视频</text>
+        </view>
+        <view class="favorite-item-check">
+          <text class="iconfont icon-check" wx:if="{{selectedFavorites.indexOf(item.fid) > -1}}"></text>
+        </view>
+      </view>
+      
+      <!-- 创建新收藏夹 -->
+      <view class="favorite-item create-new" catchtap="createNewFavorite">
+        <view class="favorite-item-info">
+          <text class="favorite-item-title">+ 创建新收藏夹</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="favorite-actions">
+      <button class="favorite-btn cancel" catchtap="cancelFavorite">取消</button>
+      <button class="favorite-btn confirm" catchtap="confirmFavorite" disabled="{{loading}}">
+        {{loading ? '处理中...' : '确定'}}
+      </button>
+    </view>
+  </view>
+</view>

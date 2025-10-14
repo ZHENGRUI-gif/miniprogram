@@ -388,6 +388,33 @@ Page({
       likeCount,
       dislikeCount
     });
+  },
+
+  // 收藏状态变化回调
+  onFavoriteChange(e) {
+    const { isCollected, collectCount, selectedFavorites } = e.detail;
+    
+    // 更新视频数据中的收藏状态
+    this.setData({
+      'video.isCollected': isCollected,
+      'video.stats.collect': collectCount
+    });
+
+    console.log('收藏状态更新:', {
+      isCollected,
+      collectCount,
+      selectedFavorites
+    });
+  },
+
+  // 全局收藏状态更新回调
+  onFavoriteUpdate(vid, isCollected, collectCount) {
+    if (vid === this.data.vid) {
+      this.setData({
+        'video.isCollected': isCollected,
+        'video.stats.collect': collectCount
+      });
+    }
   }
 });
 

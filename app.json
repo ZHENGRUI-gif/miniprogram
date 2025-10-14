@@ -12,7 +12,8 @@
     "pages/chat/chat",
     "pages/user-space/user-space",
     "pages/likes/likes",
-    "pages/video-detail/video-detail"
+    "pages/video-detail/video-detail",
+    "pages/favorites/favorites"
   ],
   "window": {
     "navigationBarTitleText": "blbl",
