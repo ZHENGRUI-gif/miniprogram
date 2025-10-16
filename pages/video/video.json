@@ -2,7 +2,9 @@
   "navigationBarTitleText": "视频",
   "usingComponents": {
     "like-button": "/components/like-button/like-button",
-    "favorite-button": "/components/favorite-button/favorite-button"
+    "favorite-button": "/components/favorite-button/favorite-button",
+    "danmu-display": "/components/danmu-display/danmu-display",
+    "danmu-send": "/components/danmu-send/danmu-send"
   }
 }
 

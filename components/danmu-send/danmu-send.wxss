@@ -1,0 +1,208 @@
+/* 弹幕发送按钮 */
+.danmu-send-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8rpx;
+  color: #fff;
+  min-width: 80rpx;
+  min-height: 80rpx;
+}
+
+.danmu-send-btn .iconfont {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.danmu-send-btn .btn-text {
+  font-size: 20rpx;
+}
+
+/* 弹幕输入弹窗 */
+.danmu-input-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.danmu-input-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 20rpx 20rpx 0 0;
+  padding: 0 0 40rpx 0;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* 标题栏 */
+.input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx 30rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  color: #999;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 输入内容 */
+.input-content {
+  padding: 30rpx;
+  position: relative;
+}
+
+.danmu-textarea {
+  width: 100%;
+  min-height: 120rpx;
+  padding: 20rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  line-height: 1.5;
+  background: #fafafa;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 10rpx;
+  right: 40rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 样式设置 */
+.style-settings {
+  padding: 0 30rpx;
+}
+
+.setting-group {
+  margin-bottom: 30rpx;
+}
+
+.setting-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+/* 弹幕模式 */
+.mode-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.mode-option {
+  flex: 1;
+  padding: 16rpx 20rpx;
+  text-align: center;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #666;
+  background: #fff;
+}
+
+.mode-option.active {
+  background: #fb7299;
+  color: #fff;
+  border-color: #fb7299;
+}
+
+/* 字体大小 */
+.font-size-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.font-size-option {
+  flex: 1;
+  padding: 16rpx 20rpx;
+  text-align: center;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #666;
+  background: #fff;
+}
+
+.font-size-option.active {
+  background: #fb7299;
+  color: #fff;
+  border-color: #fb7299;
+}
+
+/* 颜色选择 */
+.color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.color-option {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  border: 3rpx solid transparent;
+  position: relative;
+}
+
+.color-option.active {
+  border-color: #333;
+}
+
+.color-option.active::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: bold;
+  text-shadow: 1rpx 1rpx 2rpx rgba(0, 0, 0, 0.8);
+}
+
+/* 发送按钮 */
+.send-actions {
+  padding: 30rpx;
+}
+
+.send-btn {
+  width: 100%;
+  background: #fb7299;
+  color: #fff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.send-btn:disabled {
+  background: #ccc;
+  color: #999;
+}

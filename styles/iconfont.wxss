@@ -84,3 +84,20 @@
 .icon-dengchu:before {
   content: "\e65d";
 }
+
+/* 弹幕相关图标 */
+.icon-danmu:before {
+  content: "\e60b";
+}
+
+.icon-danmu-on:before {
+  content: "\e60b";
+}
+
+.icon-danmu-off:before {
+  content: "\e60c";
+}
+
+.icon-refresh:before {
+  content: "\e60d";
+}

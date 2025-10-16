@@ -1,0 +1,99 @@
+<!-- 弹幕发送按钮 -->
+<view class="danmu-send-btn" bindtap="showInputBox">
+  <text class="iconfont icon-danmu"></text>
+  <text class="btn-text">弹幕</text>
+</view>
+
+<!-- 弹幕输入弹窗 -->
+<view class="danmu-input-mask" wx:if="{{showInput}}" bindtap="onMaskTap">
+  <view class="danmu-input-box" bindtap="stopPropagation">
+    <!-- 标题栏 -->
+    <view class="input-header">
+      <text class="title">发送弹幕</text>
+      <text class="close-btn" bindtap="hideInputBox">×</text>
+    </view>
+
+    <!-- 输入框 -->
+    <view class="input-content">
+      <textarea 
+        class="danmu-textarea"
+        placeholder="说点什么..."
+        value="{{inputValue}}"
+        bindinput="onInputChange"
+        maxlength="50"
+        auto-height
+        focus="{{showInput}}"
+      ></textarea>
+      <view class="char-count">{{inputValue.length}}/50</view>
+    </view>
+
+    <!-- 样式设置 -->
+    <view class="style-settings">
+      <!-- 弹幕模式 -->
+      <view class="setting-group">
+        <text class="setting-label">弹幕模式</text>
+        <view class="mode-options">
+          <view 
+            wx:for="{{modeOptions}}" 
+            wx:key="value"
+            class="mode-option {{danmuStyle.mode === item.value ? 'active' : ''}}"
+            data-mode="{{item.value}}"
+            bindtap="changeMode"
+          >
+            {{item.label}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 字体大小 -->
+      <view class="setting-group">
+        <text class="setting-label">字体大小</text>
+        <view class="font-size-options">
+          <view 
+            class="font-size-option {{danmuStyle.fontSize === 18 ? 'active' : ''}}"
+            data-size="18"
+            bindtap="changeFontSize"
+          >
+            小
+          </view>
+          <view 
+            class="font-size-option {{danmuStyle.fontSize === 24 ? 'active' : ''}}"
+            data-size="24"
+            bindtap="changeFontSize"
+          >
+            中
+          </view>
+          <view 
+            class="font-size-option {{danmuStyle.fontSize === 30 ? 'active' : ''}}"
+            data-size="30"
+            bindtap="changeFontSize"
+          >
+            大
+          </view>
+        </view>
+      </view>
+
+      <!-- 颜色选择 -->
+      <view class="setting-group">
+        <text class="setting-label">弹幕颜色</text>
+        <view class="color-options">
+          <view 
+            wx:for="{{colorOptions}}" 
+            wx:key="*this"
+            class="color-option {{danmuStyle.color === item ? 'active' : ''}}"
+            style="background-color: {{item}}"
+            data-color="{{item}}"
+            bindtap="changeColor"
+          ></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 发送按钮 -->
+    <view class="send-actions">
+      <button class="send-btn" bindtap="sendDanmu" disabled="{{!inputValue.trim()}}">
+        发送弹幕
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,12 @@
+<view class="danmu-container" wx:if="{{enabled}}">
+  <view 
+    wx:for="{{visibleDanmus}}" 
+    wx:key="id"
+    class="danmu-item danmu-mode-{{item.mode}}"
+    style="color: {{item.color}}; font-size: {{item.fontSize}}rpx; opacity: {{opacity}}; top: {{item.row * 30 + 20}}rpx; animation-duration: {{item.duration}}ms;"
+    data-id="{{item.id}}"
+    bindanimationend="onDanmuAnimationEnd"
+  >
+    {{item.content}}
+  </view>
+</view>
