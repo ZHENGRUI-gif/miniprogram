@@ -60,14 +60,12 @@ Page({
     });
   },
 
-  // 跳转到视频列表（暂未实现）
+  // 跳转到视频列表
   goVideos(e) {
     const category = e.currentTarget.dataset.category;
-    wx.showToast({
-      title: `即将打开 ${category.name} 分区`,
-      icon: 'none'
+    wx.navigateTo({
+      url: `/pages/category-videos/category-videos?mcId=${category.id}&name=${category.name}`
     });
-    // TODO: 实现跳转到对应分区的视频列表
   }
 });
 

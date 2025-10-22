@@ -15,7 +15,8 @@
     "pages/video-detail/video-detail",
     "pages/favorites/favorites",
     "pages/category/category",
-    "pages/category-edit/category-edit"
+    "pages/category-edit/category-edit",
+    "pages/category-videos/category-videos"
   ],
   "window": {
     "navigationBarTitleText": "blbl",

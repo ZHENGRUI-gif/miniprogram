@@ -57,20 +57,6 @@ Page({
 
   onLoad() {
     this.loadData();
-    
-    // 设置右上角保存按钮
-    wx.setNavigationBarColor({
-      frontColor: '#000000',
-      backgroundColor: '#ffffff'
-    });
-  },
-
-  onReady() {
-    // 添加右上角保存按钮（使用胶囊菜单）
-    wx.showShareMenu({
-      withShareTicket: false,
-      menus: ['shareAppMessage', 'shareTimeline']
-    });
   },
 
   // 页面卸载时保存

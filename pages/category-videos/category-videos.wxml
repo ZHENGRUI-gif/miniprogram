@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 分区标题 -->
+  <view class="category-header">
+    <text class="category-name">{{categoryName}}</text>
+  </view>
+
+  <!-- 排序选项 -->
+  <view class="sort-bar">
+    <view 
+      class="sort-item {{sortRule === 1 ? 'active' : ''}}" 
+      bindtap="changeSortRule" 
+      data-rule="1"
+    >
+      最新投稿
+    </view>
+    <view 
+      class="sort-item {{sortRule === 2 ? 'active' : ''}}" 
+      bindtap="changeSortRule" 
+      data-rule="2"
+    >
+      最多播放
+    </view>
+    <view 
+      class="sort-item {{sortRule === 3 ? 'active' : ''}}" 
+      bindtap="changeSortRule" 
+      data-rule="3"
+    >
+      最多点赞
+    </view>
+  </view>
+
+  <!-- 视频列表 -->
+  <scroll-view 
+    class="video-list" 
+    scroll-y="true" 
+    bindscrolltolower="loadMore"
+    lower-threshold="100"
+  >
+    <view class="video-grid">
+      <view 
+        class="video-item card" 
+        wx:for="{{videoList}}" 
+        wx:key="vid"
+        bindtap="goDetail"
+        data-vid="{{item.video.vid}}"
+      >
+        <view class="thumb-wrap">
+          <image class="cover" src="{{item.video.coverUrl}}" mode="aspectFill" />
+          <view class="cover-mask">
+            <view class="stats-left">
+              <view class="stat-item">
+                <text class="stat-icon">▶</text>
+                <text class="stat-text">{{formatNum(item.stats.play)}}</text>
+              </view>
+              <view class="stat-item">
+                <text class="stat-icon">💬</text>
+                <text class="stat-text">{{formatNum(item.stats.danmu)}}</text>
+              </view>
+            </view>
+            <view class="duration">{{formatDuration(item.video.duration)}}</view>
+          </view>
+        </view>
+        <view class="title text-ellipsis">{{item.video.title}}</view>
+        <view class="meta">
+          <text class="up-name">{{item.user.nickname || 'UP主'}}</text>
+          <text class="upload-time">· {{formatUploadTime(item.video.uploadDate)}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="load-status">
+      <view wx:if="{{loading}}" class="loading">
+        <text class="loading-text">加载中...</text>
+      </view>
+      <view wx:elif="{{!hasMore && videoList.length > 0}}" class="no-more">
+        <text class="no-more-text">没有更多了</text>
+      </view>
+      <view wx:elif="{{videoList.length === 0 && !loading}}" class="empty">
+        <text class="empty-icon">📭</text>
+        <text class="empty-text">暂无视频</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
