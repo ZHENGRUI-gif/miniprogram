@@ -1,0 +1,45 @@
+<view class="container">
+  <!-- 快捷访问 (0/8) -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">快捷访问 ({{quickAccess.length}}/8)</text>
+      <text class="tip-text">待添加</text>
+    </view>
+    <view class="quick-access-grid">
+      <view 
+        class="category-item" 
+        wx:for="{{quickAccess}}" 
+        wx:key="id"
+      >
+        <view class="remove-btn" bindtap="removeItem" data-id="{{item.id}}">
+          <text class="remove-icon">-</text>
+        </view>
+        <view class="category-icon">{{item.icon}}</view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 全部分区 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">全部分区</text>
+    </view>
+    <view class="category-grid">
+      <view 
+        class="category-item {{item.added ? 'disabled' : ''}}" 
+        wx:for="{{allCategories}}" 
+        wx:key="id"
+        bindtap="addItem"
+        data-item="{{item}}"
+      >
+        <view class="add-btn" wx:if="{{!item.added}}">
+          <text class="add-icon">+</text>
+        </view>
+        <view class="category-icon">{{item.icon}}</view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+

@@ -111,6 +111,9 @@ Page({
   goInbox() {
     wx.navigateTo({ url: '/pages/inbox/inbox' });
   },
+  goCategory() {
+    wx.navigateTo({ url: '/pages/category/category' });
+  },
 
   // 计算消息未读数 - 参考blbl项目的实现
   updateMsgUnread() {

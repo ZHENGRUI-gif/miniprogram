@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="header">
+    <text class="title">分区</text>
+  </view>
+
+  <!-- 快捷访问 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">快捷访问</text>
+      <text class="edit-btn" bindtap="goEdit">编辑</text>
+    </view>
+    <view class="quick-access">
+      <view wx:if="{{quickAccess.length === 0}}" class="empty-tip">
+        <text class="empty-text">待添加</text>
+      </view>
+      <view wx:else class="category-grid">
+        <view 
+          class="category-item" 
+          wx:for="{{quickAccess}}" 
+          wx:key="id"
+          bindtap="goVideos"
+          data-category="{{item}}"
+        >
+          <view class="category-icon">{{item.icon}}</view>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 全部分区 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">全部分区</text>
+    </view>
+    <view class="category-grid">
+      <view 
+        class="category-item" 
+        wx:for="{{allCategories}}" 
+        wx:key="id"
+        bindtap="goVideos"
+        data-category="{{item}}"
+      >
+        <view class="category-icon">{{item.icon}}</view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+

@@ -19,9 +19,14 @@
     </view>
   </view>
 
-  <scroll-view class="tabs" scroll-x="true" enable-flex="true">
-    <view class="tab {{activeTab===item ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="*this" data-tab="{{item}}" bindtap="switchTab">{{item}}</view>
-  </scroll-view>
+  <view class="tabs-container">
+    <scroll-view class="tabs" scroll-x="true" enable-flex="true">
+      <view class="tab {{activeTab===item ? 'active' : ''}}" wx:for="{{tabs}}" wx:key="*this" data-tab="{{item}}" bindtap="switchTab">{{item}}</view>
+    </scroll-view>
+    <view class="menu-btn" bindtap="goCategory">
+      <text class="menu-icon">☰</text>
+    </view>
+  </view>
 
   <swiper class="banner" autoplay interval="4000" circular indicator-dots indicator-color="#eee" indicator-active-color="#fb7299">
     <block wx:for="{{banners}}" wx:key="url">
