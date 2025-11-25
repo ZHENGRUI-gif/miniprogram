@@ -1,0 +1,134 @@
+.container {
+  padding-bottom: 20rpx;
+  background-color: #f6f7f9;
+  min-height: 100vh;
+}
+
+.rank-list {
+  padding: 20rpx;
+}
+
+.rank-item {
+  display: flex;
+  align-items: flex-start; /* 改为顶部对齐，适应封面高度 */
+  background: #fff;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+}
+
+.rank-index {
+  width: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #999;
+  text-align: center;
+  margin-right: 16rpx;
+  font-style: italic;
+  align-self: center; /* 排名垂直居中 */
+}
+
+.rank-index.top-3 {
+  color: #fb7299;
+  font-size: 40rpx;
+}
+
+/* 视频封面样式 */
+.video-cover {
+  position: relative;
+  width: 240rpx;
+  height: 150rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+  flex-shrink: 0; /* 防止被压缩 */
+  background-color: #eee;
+}
+
+.video-cover image {
+  width: 100%;
+  height: 100%;
+}
+
+.duration {
+  position: absolute;
+  bottom: 8rpx;
+  right: 8rpx;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.rank-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150rpx; /* 与封面高度一致 */
+  overflow: hidden;
+}
+
+.rank-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 4rpx;
+}
+
+/* 多行文本省略 */
+.text-ellipsis-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.up-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.up-name {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.rank-stats {
+  margin-bottom: 4rpx;
+}
+
+.stat-item {
+  font-size: 22rpx;
+  color: #fb7299;
+  font-weight: 500;
+}
+
+.rank-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.icon {
+  font-size: 20rpx;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+}

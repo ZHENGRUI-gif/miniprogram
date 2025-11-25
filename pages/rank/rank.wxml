@@ -1,0 +1,65 @@
+<view class="container">
+  <view class="rank-list">
+    <view class="rank-item" wx:for="{{rankList}}" wx:key="vid" bindtap="onItemTap" data-vid="{{item.vid}}">
+      <view class="rank-index {{index < 3 ? 'top-3' : ''}}">{{index + 1}}</view>
+      
+      <!-- 视频封面容器 -->
+      <view class="video-cover">
+        <image src="{{item.video.coverUrl}}" mode="aspectFill" lazy-load="true"></image>
+        <view class="duration" wx:if="{{item.video.duration}}">{{tools.formatTime(item.video.duration)}}</view>
+      </view>
+
+      <view class="rank-info">
+        <!-- 标题 -->
+        <view class="rank-title text-ellipsis-2">{{item.video.title}}</view>
+        
+        <!-- UP主信息 -->
+        <view class="up-info">
+          <text class="up-name">{{item.user.nickname}}</text>
+        </view>
+        
+        <!-- 热力值 -->
+        <view class="rank-stats">
+          <text class="stat-item">综合得分: {{item.score}}</text>
+        </view>
+        
+        <!-- 数据统计 -->
+        <view class="rank-details">
+          <view class="detail-item"><text class="icon">▶</text>{{tools.formatCount(item.play)}}</view>
+          <view class="detail-item"><text class="icon">👍</text>{{tools.formatCount(item.love)}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view wx:if="{{rankList.length === 0 && !loading}}" class="empty-tip">
+    暂无排行数据
+  </view>
+</view>
+
+<wxs module="tools">
+  // 格式化数字
+  var formatCount = function(count) {
+    if (!count) return 0;
+    if (count > 10000) {
+      return (count / 10000).toFixed(1) + '万';
+    }
+    return count;
+  }
+
+  // 格式化时长
+  var formatTime = function(seconds) {
+    if (!seconds) return '';
+    var m = Math.floor(seconds / 60);
+    var s = Math.floor(seconds % 60);
+    if (m < 10) m = '0' + m;
+    if (s < 10) s = '0' + s;
+    return m + ':' + s;
+  }
+
+  module.exports = {
+    formatCount: formatCount,
+    formatTime: formatTime
+  }
+</wxs>
+

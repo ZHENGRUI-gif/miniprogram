@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/rank/rank",
     "pages/follow/follow",
     "pages/message/message",
     "pages/profile/profile",
@@ -32,10 +33,10 @@
     "list": [
       { "pagePath": "pages/index/index", "text": "首页" },
       { "pagePath": "pages/follow/follow", "text": "关注" },
+      { "pagePath": "pages/rank/rank", "text": "热门" },
       { "pagePath": "pages/message/message", "text": "消息" },
       { "pagePath": "pages/profile/profile", "text": "我的" }
     ]
   },
   "sitemapLocation": "sitemap.json"
 }
-
